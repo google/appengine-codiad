@@ -33,13 +33,13 @@ deploy: deploy_requirements build
 
 testing: build
 	docker tag -f google/ide-appengine gcr.io/developer_tools_bundle/ide-proxy:testing
-	gcloud preview docker push gcr.io/developer_tools_bundle/ide-proxy:testing
+	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy:testing
 
 dev: build
 	docker tag -f google/ide-appengine gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
-	gcloud preview docker push gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
+	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
 
 release: build
-	gcloud preview docker pull gcr.io/developer_tools_bundle/ide-proxy:testing
+	gcloud docker pull gcr.io/developer_tools_bundle/ide-proxy:testing
 	docker tag -f gcr.io/developer_tools_bundle/ide-proxy:testing gcr.io/developer_tools_bundle/ide-proxy
-	gcloud preview docker push gcr.io/developer_tools_bundle/ide-proxy
+	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy

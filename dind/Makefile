@@ -15,4 +15,4 @@
 all:
 	docker build -t google/dind .
 	docker tag -f google/dind gcr.io/developer_tools_bundle/dind
-	gcloud preview docker push gcr.io/developer_tools_bundle/dind
+	gcloud docker push gcr.io/developer_tools_bundle/dind

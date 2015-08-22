@@ -15,4 +15,4 @@
 all:
 	docker build -t codiad-base-image .
 	docker tag -f codiad-base-image gcr.io/developer_tools_bundle/codiad-base-image
-	gcloud preview docker push gcr.io/developer_tools_bundle/codiad-base-image
+	gcloud docker push gcr.io/developer_tools_bundle/codiad-base-image

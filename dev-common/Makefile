@@ -15,4 +15,4 @@
 all:
 	docker build -t google/dev-common .
 	docker tag -f google/dev-common gcr.io/developer_tools_bundle/dev-common
-	gcloud preview docker push gcr.io/developer_tools_bundle/dev-common
+	gcloud docker push gcr.io/developer_tools_bundle/dev-common

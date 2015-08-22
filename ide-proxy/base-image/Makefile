@@ -15,4 +15,4 @@
 all:
 	docker build -t ide-frontend-base-image .
 	docker tag -f ide-frontend-base-image gcr.io/developer_tools_bundle/ide-frontend-base-image
-	gcloud preview docker push gcr.io/developer_tools_bundle/ide-frontend-base-image
+	gcloud docker push gcr.io/developer_tools_bundle/ide-frontend-base-image
