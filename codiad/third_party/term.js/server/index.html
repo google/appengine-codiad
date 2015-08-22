@@ -1,0 +1,134 @@
+<!doctype html>
+<title>term.js</title>
+<!--
+  term.js
+  Copyright (c) 2012-2015, Christopher Jeffrey & Google Inc. (MIT License)
+-->
+<style>
+  html {
+    background: black;
+  }
+  body {
+    margin: 0;
+    width: 100%
+  }
+  .terminal {
+    padding: 0;
+    float: left;
+    border: #000 solid 0px;
+    font-family: monospace;
+    font-size: 11px;
+    opacity: 1;
+  }
+  .terminal-cursor {
+    color: black;
+    background-color: bisque;
+  }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+<script src="term.min.js"></script>
+<script type="text/javascript">
+function cursorBlink() {
+  $('.terminal-cursor').each(function() {
+    var color = $(this).css('color');
+    if (color === 'rgba(0, 0, 0, 0)') {
+      color = 'black';
+    }
+    var bcolor = $(this).css('background-color');
+    if (bcolor === 'rgba(0, 0, 0, 0)') {
+      bcolor = 'black';
+    }
+    $(this).css('color', bcolor).css('background-color', color);
+  });
+}
+//setInterval(cursorBlink, 600);
+</script>
+<div id="terminal"></div>
+<script>
+String.prototype.widthHeight = function(font) {
+  var f = font || '11px monospace',
+      o = $('<div>' + this + '</div>')
+            .css({'position': 'absolute', 'float': 'left',
+                  'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})
+            .appendTo($('body')),
+      r = o[0].getBoundingClientRect(),
+      wh = {'width': r.width, 'height': r.height};
+
+  o.remove();
+
+  return wh;
+}
+
+function calculateColsRows(term) {
+  var widthHeight = 'A'.widthHeight();
+  return {
+    cols: Math.floor($(window).width() / widthHeight.width),
+    rows: Math.floor($(window).height() / widthHeight.height)
+  };
+}
+
+function resizeTerminal() {
+  var term = $('#terminal').data('object');
+  var socket = $('#terminal').data('socket');
+  if (term && socket) {
+    var newSize = calculateColsRows(term);
+    if (newSize.cols !== term.cols || newSize.rows !== term.rows) {
+      console.log('resize');
+      term.resize(newSize.cols, newSize.rows);
+      socket.emit('resize', newSize);
+    }
+  }
+}
+
+window.onload = function() {
+  var pathComponents = document.location.pathname.split('/'),
+  // Strip last part (either index.html or "", presumably)
+  baseURL = pathComponents.slice(0,pathComponents.length-1).join('/') + '/',
+  resource = baseURL + "socket.io";
+  var socket = io.connect(document.location.origin, {
+    'path': resource,
+    'transports': ['flashsocket', 'htmlfile', 'xhr-polling',
+      'jsonp-polling', 'polling']
+  });
+
+  $('#terminal').data('socket', socket);
+  socket.on('connect', function() {
+    var term = new Terminal({
+      cols: 80,
+      rows: 10,
+      useStyle: false,
+      screenKeys: true,
+      cursorBlink: false,
+      scrollback: 10000
+    });
+
+    $('#terminal').data('object', term);
+
+    term.on('data', function(data) {
+      socket.emit('data', data);
+    });
+
+    term.on('title', function(title) {
+      document.title = title;
+    });
+
+    term.open(document.body);
+    term.write('\n');
+    resizeTerminal();
+
+    socket.on('data', function(data) {
+      term.write(data);
+    });
+
+    socket.on('disconnect', function() {
+      console.log('Received disconnect signal.');
+      term.destroy();
+      $('#terminal').data('object', null);
+    });
+  });
+};
+
+setInterval(resizeTerminal, 1000);
+</script>

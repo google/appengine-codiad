@@ -1,0 +1,163 @@
+# Copyright 2015 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# http://wiki.nginx.org/Pitfalls
+# http://wiki.nginx.org/QuickStart
+# http://wiki.nginx.org/Configuration
+#
+# Generally, you will want to move this file somewhere, and start with a clean
+# file but keep this around for reference. Or just disable in sites-enabled.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+server {
+	listen 8080 default_server;
+	listen [::]:8080 default_server ipv6only=on;
+
+  gzip on;
+  gzip_vary on;
+  gzip_comp_level 6;
+  gzip_proxied any;
+  gzip_types text/plain text/html text/css application/x-javascript
+             text/xml application/xml application/xml+rss text/javascript;
+
+  client_max_body_size 500M;
+
+	root /usr/share/nginx/www;
+	index index.html index.htm index.php;
+
+	# Make site accessible from http://localhost/
+	server_name _;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ =404;
+		# Uncomment to enable naxsi on this location
+		# include /etc/nginx/naxsi.rules
+	}
+
+	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
+	#location /RequestDenied {
+	#	proxy_pass http://127.0.0.1:8080;
+	#}
+
+	#error_page 404 /404.html;
+
+	# redirect server error pages to the static page /50x.html
+	#
+	#error_page 500 502 503 504 /50x.html;
+	#location = /50x.html {
+	#	root /usr/share/nginx/html;
+	#}
+
+	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+	#
+
+  location ~* ^/(?!p/([0-9]+)/).*\.php$ {
+    include snippets/fastcgi-php.conf;
+    # With php5-fpm:
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+  }
+
+	# deny access to .htaccess files, if Apache's document root
+	# concurs with nginx's one
+	#
+	#location ~ /\.ht {
+	#	deny all;
+	#}
+
+  location /shell/ {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+    # prevents 502 bad gateway error
+    proxy_connect_timeout 5s;
+    proxy_read_timeout 20s;
+    proxy_send_timeout 20s;
+    proxy_buffers 16 32k;
+    proxy_buffer_size 64k;
+
+    proxy_pass http://127.0.0.1:8081/;
+    proxy_redirect off;
+
+    # enables WS support
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+
+  location /p/10000/ {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+    # prevents 502 bad gateway error
+    proxy_buffers 8 32k;
+    proxy_buffer_size 64k;
+
+    proxy_pass http://127.0.0.1:10000/;
+    proxy_redirect off;
+
+    # enables WS support
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+
+  location /p/10001/ {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+    # prevents 502 bad gateway error
+    proxy_buffers 8 32k;
+    proxy_buffer_size 64k;
+
+    proxy_pass http://127.0.0.1:10001/;
+    proxy_redirect off;
+
+    # enables WS support
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+
+  location /p/10002/ {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+    # prevents 502 bad gateway error
+    proxy_buffers 8 32k;
+    proxy_buffer_size 64k;
+
+    proxy_pass http://127.0.0.1:10002/;
+    proxy_redirect off;
+
+    # enables WS support
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}

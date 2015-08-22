@@ -1,0 +1,2 @@
+deb http://gce_debian_mirror.storage.googleapis.com/ jessie main
+deb http://gce_debian_mirror.storage.googleapis.com/ jessie-updates main

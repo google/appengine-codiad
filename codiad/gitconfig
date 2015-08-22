@@ -1,0 +1,9 @@
+[core]
+  repositoryformatversion = 0
+  filemode = true
+  bare = false
+  logallrefupdates = true
+[push]
+  default = simple
+[credential "https://source.developers.google.com"]
+  helper = gcloud.sh

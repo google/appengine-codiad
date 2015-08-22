@@ -1,0 +1,44 @@
+.CodeMirror-overwrite .CodeMirror-cursor {
+  width: auto;
+  border: 0;
+  background: transparent;
+  background: rgba(220, 220, 220, .4);
+}
+
+.CodeMirror {
+  width: 100%;
+  height: inherit;
+}
+
+.cm-trailingspace {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QUXCToH00Y1UgAAACFJREFUCNdjPMDBUc/AwNDAAAFMTAwMDA0OP34wQgX/AQBYgwYEx4f9lQAAAABJRU5ErkJggg==);
+  background-position: bottom left;
+  background-repeat: repeat-x;
+}
+
+.line-focused {
+  background-color: gold;
+}
+
+.CodeMirror-focused .cm-matchhighlight {
+  outline-width: 1px;
+  outline-style: solid;
+  outline-color: #FF00FF;
+}
+
+.kythe-local-ref {
+  text-decoration: underline;
+}
+
+.kythe-info-card {
+  border: 1px solid pink;
+  padding: 4px;
+  border-radius: 2px;
+  background-color: black;
+  z-index: 100000;
+  color: white;
+  font-family: sans-serif;
+  width: 300px;
+  word-wrap: break-word;
+  box-shadow: 2px 2px 2px #888888;
+}

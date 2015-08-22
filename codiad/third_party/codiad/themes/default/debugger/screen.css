@@ -1,0 +1,122 @@
+#debugger-top-bar {
+  height: 2em;
+  background: #303030;
+  box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, .9);
+}
+#debugger-content {
+  width: 100%;
+  overflow: auto;
+}
+
+.dbg-icon-help {
+  padding-top: 6px;
+  padding-left: 4px;
+  font-size: 15px;
+}
+
+.text-center {
+  text-align: center;
+}
+.padding-3px {
+  padding: 3px;
+}
+.padding-3px-lr {
+  padding: 0 3px 0;
+}
+.bold {
+  font-weight: bold;
+}
+.shrink {
+  white-space: nowrap;
+}
+.expand {
+  width: 99%;
+}
+
+.breakpoints-head {
+  margin: 2px;
+  border: 1px solid gray;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #ebecee;
+  color: black;
+}
+
+.dbg-watch-exprs {
+  margin: 3px;
+  width: calc(100% - 6px);
+}
+.dbg-watch-exprs td {
+  border: 1px solid gray;
+  padding: 3px;
+}
+
+.dbg-pane-stack {
+  margin-top: 15px;
+}
+.dbg-stack-head {
+  margin: 2px;
+  border: 1px solid gray;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #ebecee;
+  color: black;
+}
+
+.dbg-stack-frame-details {
+  padding-top: 3px;
+  padding-left: 10px;
+}
+.dbg-stack-frame-loc {
+  padding: 3px 0 0 8px;
+}
+.dbg-stack-frame-head2 {
+  padding: 3px 0 0 13px;
+}
+.dbg-stack-frame-val {
+  padding: 3px 0 0 18px;
+}
+.dbg-value-color {
+  color: #FFCC00;
+}
+.dbg-err-info-color {
+  color: #999999;
+}
+
+.breakpoint-normal {
+  background-color: #1a1a1a;
+  margin: 2px;
+  border-radius: 3px;
+}
+.breakpoint-hovered {
+  background-color: orange;
+  margin: 2px;
+  border-radius: 3px;
+}
+.breakpoint-selected {
+  background-color: brown;
+  margin: 2px;
+  border-radius: 3px;
+}
+
+.breakpoint-marker-pending {
+  color: yellow;
+}
+.breakpoint-marker-set {
+  color: #822;
+}
+.dbg-stack-frame-handle {
+  display: inline-block;
+  color: gray;
+  margin: 1px 5px 0 3px;
+  padding: 0;
+  width: 7px;
+  font-size: 100%;
+}
+
+.dbg-dialog-table tr td {
+  border: none;
+  padding: 0;
+}

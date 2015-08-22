@@ -1,0 +1,74 @@
+<!--
+Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ -->
+<!doctype html>
+<html>
+  <head>
+    <style type="text/css">
+      .load-image {
+        background-repeat: no-repeat;
+        background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');
+      }
+      div {
+        padding: 0.5em;
+      }
+      .inline {
+        display: inline-block;
+      }
+      .done-image {
+        background-repeat: no-repeat;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACOElEQVQ4T6WTS2gTURSGz53JJGnSTkNIfEYImahojWSqCaa74qoiXfiIlko3haJuFMVNtRqDUIRoVll0oasWS2KyEdxYQQVNEdHaVq2mbUy1yKjFvCbPuXckhQSpKdh6t+eej3P+/z8I/uNdi3Ab0Hr7PWGriaKo6LoAnvAOC0XBOMayds2AK5Htu5QIPcNYNhCJdK0J4L1v5UGBxlQMZkWRfuB1x478M2AgaHXRNDw0GiSdICiEIpCdN93zqWXAjeHWAwRBVKFPt/V3zEZXCns1ZDlIIQibTLj5S4JKl4py52DP56eVf6ja3HO0G0Yf3c1hRbnzcsenx1WIJ2Q5LGEyzHFy8w8Bib+S6M7gqfi5ah15R1rlvQ4JxFwGeEs3BMdGU4DlQ57jcy8GQtxJIuEhxz6WFb6n5bkYzGu02t0e97tSDXA2YGxUM5oZ3kHraQo3GHUcPHkeT6podaQg5Y85HSybFbMw9RqnpbLsunV64f2fKy5rcN5v1tGNZNK+X7mRpiWlRs3C1EQZbHYG8oUMfPxAsukUXL/dl/Ct1KfmwsWhLQZAzCTvVBkpqqTossXh3qQZln4yOBEvv/L1JlyAQF4VUClcCpg3EUZ+28I3GNSqAkWIGiZe5pMY4z3+M18X68X+rxxcCHDbkFJ6Y+Ob9LGZjJjLyb3+voXgajdTL0ib7e1NzvYT+pHF2UJ/0CdUckEAoAgAOQDIA8C3mgt1yFsBQNXSpmURQcXp8ewSAFRsS9ab4jfCjd2WTMs1UgAAAABJRU5ErkJggg==');
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+      function getStatus() {
+        $.get('/-/status', function(response) {
+          if (response.status === 'created') {
+            $('.ide-creation-status').removeClass('load-image').addClass('done-image');
+          }
+          if (!response.inInitialSync) {
+            $('.workspace-copy-status').removeClass('load-image').addClass('done-image');
+          }
+          if (response.status === 'created' && !response.inInitialSync) {
+            $.get('/', function(connectResponse) {
+              if (connectResponse.error) {
+                $('.connection-status').html('IDE is starting up. If this took more than 2 minutes, ' +
+                                             'try recreating the IDE by visiting: <a href="/-/recreate">Recreate IDE</a>.');
+              } else {
+                window.location = '/';
+              }
+            });
+          }
+        });
+      }
+      window.setInterval(getStatus, 5000);
+    </script>
+  </head>
+  <body>
+    <div>
+      <div class="ide-creation-status load-image inline"></div>
+      <div class="inline">Creating IDE instance</div>
+    </div>
+    <div>
+      <div class="workspace-copy-status load-image inline"></div>
+      <div class="inline">Copying workspace</div>
+    </div>
+    <div>
+      <div class="inline">This page will automatically connect to IDE once it is ready. </div>
+      <div class="connection-status inline"></div>
+    </div>
+  </body>
+</html>

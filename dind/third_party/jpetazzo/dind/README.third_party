@@ -1,0 +1,12 @@
+URL: https://raw.githubusercontent.com/jpetazzo/dind/977fcab64737b1c79bf81543a318884b3ac314ad/wrapdocker
+Version: 977fcab64737b1c79bf81543a318884b3ac314ad
+License: Apache 2.0
+License File: LICENSE
+
+Description:
+The wrapdocker script handles the necessary prep work for a Docker container to run Docker.
+
+Local Modifications:
+Added ensure_loopback_device prior to starting docker, to ensure at least four loopback devices exist. Inspired by https://github.com/jpetazzo/dind/issues/19#issuecomment-48859883.
+
+Start docker using "service docker start" rather than explicitly calling docker. This allows users to use the standard service interface for things like checking the status of the service, restarting it, or stopping it.
