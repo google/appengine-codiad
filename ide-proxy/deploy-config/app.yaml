@@ -13,7 +13,6 @@
 # limitations under the License.
 
 module: codiad
-version: 1
 runtime: custom
 vm: true
 api_version: 1
