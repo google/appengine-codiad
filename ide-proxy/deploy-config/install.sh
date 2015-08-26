@@ -91,4 +91,4 @@ if [ -z "$(gcloud --project=${PROJECT} compute networks list | grep codiad)" ]; 
   gcloud --project="${PROJECT}" compute networks create codiad
 fi
 
-gcloud --project="${PROJECT}" --quiet preview app deploy --force --version=${VERSION} ./app.yaml "--docker-build=local"
+gcloud --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml "--docker-build=local"
