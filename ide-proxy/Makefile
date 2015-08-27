@@ -37,13 +37,13 @@ deploy_latest: deploy_requirements
 
 # Pushes the the local build to testing
 testing: deploy_requirements build
-	export GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
+	export GCR_BUCKET=$(echo ${PROJECT} | sed 's/-/_/g')
 	docker tag -f google/ide-appengine gcr.io/${GCR_BUCKET}/ide-proxy:testing
 	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy:testing
 
 # Pushes the the testing to latest(stable)
 release: deploy_requirements
-	export GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
+	export GCR_BUCKET=$(echo ${PROJECT} | sed 's/-/_/g')
 	gcloud docker pull gcr.io/${GCR_BUCKET}/ide-proxy:testing
 	docker tag -f gcr.io/${GCR_BUCKET}/ide-proxy:testing gcr.io/${GCR_BUCKET}/ide-proxy
 	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy
