@@ -93,9 +93,7 @@ if [ -z "$(gcloud --project=${PROJECT} compute networks list | grep codiad)" ]; 
   gcloud --project="${PROJECT}" compute networks create codiad
 fi
 
-cat > ./Dockerfile <<EOF
-from $IMAGE
-EOF
+echo "from $IMAGE" > ./Dockerfile
 
 gcloud --quiet --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=remote'
 
