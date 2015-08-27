@@ -18,11 +18,14 @@
 PROJECT=$1
 RELEASE=$2
 
+USER_TAG=$(git config user.email | sed -e "s/@/-at-/" -e "s/\\./-dot-/g")
+GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
+
 VERSION=1
-DEFAULT_RELEASE=latest
 
 # Local tag for the Docker image we deploy
-DOCKER_TAG="google/ide-appengine"
+LOCAL_DOCKER_IMAGE="google/ide-appengine"
+
 function defaultModuleExists() {
   local project=$1
   local count=$(gcloud preview app modules list default --project $project 2>&1 \
@@ -69,15 +72,14 @@ EOF
   return $status
 }
 
+# If there is no release is specified then use the local image:
 if [ -z $RELEASE ]; then
-  # Ensure that we have a local image to deploy
-  if [ -z "$(docker images -q --all ${DOCKER_TAG})" ]; then
-    docker pull gcr.io/developer_tools_bundle/ide-proxy:$DEFAULT_RELEASE
-    docker tag -f gcr.io/developer_tools_bundle/ide-proxy:$DEFAULT_RELEASE ${DOCKER_TAG}
-  fi
+  RELEASE=${USER_TAG}
+  IMAGE="gcr.io/${GCR_BUCKET}/ide-proxy:${RELEASE}"
+  docker tag -f ${LOCAL_DOCKER_IMAGE} $IMAGE
+  gcloud docker push $IMAGE
 else
-  docker pull gcr.io/developer_tools_bundle/ide-proxy:$RELEASE
-  docker tag -f gcr.io/developer_tools_bundle/ide-proxy:$RELEASE ${DOCKER_TAG}
+  IMAGE="gcr.io/${GCR_BUCKET}/ide-proxy:${RELEASE}"
 fi
 
 if ! defaultModuleExists $PROJECT; then
@@ -91,4 +93,10 @@ if [ -z "$(gcloud --project=${PROJECT} compute networks list | grep codiad)" ]; 
   gcloud --project="${PROJECT}" compute networks create codiad
 fi
 
-gcloud --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml "--docker-build=local"
+cat > ./Dockerfile <<EOF
+from $IMAGE
+EOF
+
+gcloud --quiet --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=remote'
+
+rm -f ./Dockerfile

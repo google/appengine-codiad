@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-user := $(shell git config user.email | sed -e "s/@/-at-/" -e "s/\\./-dot-/g")
-
 all: build
 
 build: create_codiad_image
@@ -31,15 +29,21 @@ deploy_requirements:
 deploy: deploy_requirements build
 	cd ./deploy-config && bash ./install.sh "${PROJECT}"
 
+deploy_testing: deploy_requirements
+	cd ./deploy-config && bash ./install.sh "${PROJECT}" testing
+
+deploy_latest: deploy_requirements
+	cd ./deploy-config && bash ./install.sh "${PROJECT}" latest
+
+# Pushes the the local build to testing
 testing: build
-	docker tag -f google/ide-appengine gcr.io/developer_tools_bundle/ide-proxy:testing
-	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy:testing
+	export GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
+	docker tag -f google/ide-appengine gcr.io/${GCR_BUCKET}/ide-proxy:testing
+	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy:testing
 
-dev: build
-	docker tag -f google/ide-appengine gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
-	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
-
+# Pushes the the testing to latest(stable)
 release:
-	gcloud docker pull gcr.io/developer_tools_bundle/ide-proxy:testing
-	docker tag -f gcr.io/developer_tools_bundle/ide-proxy:testing gcr.io/developer_tools_bundle/ide-proxy
-	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy
+	export GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
+	gcloud docker pull gcr.io/${GCR_BUCKET}/ide-proxy:testing
+	docker tag -f gcr.io/${GCR_BUCKET}/ide-proxy:testing gcr.io/${GCR_BUCKET}/ide-proxy
+	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy

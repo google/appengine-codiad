@@ -17,7 +17,7 @@ runtime: custom
 vm: true
 api_version: 1
 
-vm_settings:
+beta_settings:
   service_account_scopes: https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control,https://www.googleapis.com/auth/appengine.admin
   run_docker_privileged: true
 
