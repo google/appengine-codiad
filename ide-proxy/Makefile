@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-GCR_BUCKET := $(shell echo ${PROJECT} | sed 's/-/_/g')
-export GCR_BUCKET
-
 all: build
 
 build: create_codiad_image
@@ -40,11 +37,11 @@ deploy_latest: deploy_requirements
 
 # Pushes the the local build to testing
 testing: deploy_requirements build
-	docker tag -f google/ide-appengine gcr.io/${GCR_BUCKET}/ide-proxy:testing
-	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy:testing
+	docker tag -f google/ide-appengine gcr.io/${PROJECT}/ide-proxy:testing
+	gcloud docker push gcr.io/${PROJECT}/ide-proxy:testing
 
 # Pushes the the testing to latest(stable)
 release: deploy_requirements
-	gcloud docker pull gcr.io/${GCR_BUCKET}/ide-proxy:testing
-	docker tag -f gcr.io/${GCR_BUCKET}/ide-proxy:testing gcr.io/${GCR_BUCKET}/ide-proxy
-	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy
+	gcloud docker pull gcr.io/${PROJECT}/ide-proxy:testing
+	docker tag -f gcr.io/${PROJECT}/ide-proxy:testing gcr.io/${PROJECT}/ide-proxy
+	gcloud docker push gcr.io/${PROJECT}/ide-proxy

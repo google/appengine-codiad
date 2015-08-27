@@ -19,7 +19,6 @@ PROJECT=$1
 RELEASE=$2
 
 USER_TAG=$(git config user.email | sed -e "s/@/-at-/" -e "s/\\./-dot-/g")
-GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
 
 VERSION=1
 
@@ -75,11 +74,11 @@ EOF
 # If there is no release is specified then use the local image:
 if [ -z $RELEASE ]; then
   RELEASE=${USER_TAG}
-  IMAGE="gcr.io/${GCR_BUCKET}/ide-proxy:${RELEASE}"
+  IMAGE="gcr.io/${PROJECT}/ide-proxy:${RELEASE}"
   docker tag -f ${LOCAL_DOCKER_IMAGE} $IMAGE
   gcloud docker push $IMAGE
 else
-  IMAGE="gcr.io/${GCR_BUCKET}/ide-proxy:${RELEASE}"
+  IMAGE="gcr.io/${PROJECT}/ide-proxy:${RELEASE}"
 fi
 
 if ! defaultModuleExists $PROJECT; then
