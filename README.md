@@ -43,17 +43,6 @@ appengine. Proxy code can be found under `ide-proxy` directory.
 
 In order to do so, please see the `README.md` file in `codiad` directory.
 
-### Building a testing image
+### Deploying to a Google Cloud project
 
-The image is built using Make, and the testing target builds a new testing image
-and tags it as testing(and uploads it to gcr.io). Simply run the following command in the root
-directory:
-
-    make testing
-
-### Labelling a validated testing image as "latest"
-
-Once you've validated that a testing image is good, mark it as stable using the "release"
-make target:
-
-    make release
+Please see the instructions in `ide-proxy` directory.
