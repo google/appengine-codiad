@@ -24,7 +24,7 @@ create_codiad_image:
 	docker save codiad | gzip -c | split -b 30m - codiad.tgz.part.
 
 deploy_requirements:
-	if [ -z "${PROJECT}" ]; then echo "Usage: make deploy PROJECT=<YOUR_GCP_PROJECT>"; exit 1; fi
+	if [ -z "${PROJECT}" ]; then echo "Usage: make <target> PROJECT=<YOUR_GCP_PROJECT>"; exit 1; fi
 
 deploy: deploy_requirements build
 	cd ./deploy-config && bash ./install.sh "${PROJECT}"
@@ -36,13 +36,13 @@ deploy_latest: deploy_requirements
 	cd ./deploy-config && bash ./install.sh "${PROJECT}" latest
 
 # Pushes the the local build to testing
-testing: build
+testing: deploy_requirements build
 	export GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
 	docker tag -f google/ide-appengine gcr.io/${GCR_BUCKET}/ide-proxy:testing
 	gcloud docker push gcr.io/${GCR_BUCKET}/ide-proxy:testing
 
 # Pushes the the testing to latest(stable)
-release:
+release: deploy_requirements
 	export GCR_BUCKET=$(echo $PROJECT | sed 's/-/_/g')
 	gcloud docker pull gcr.io/${GCR_BUCKET}/ide-proxy:testing
 	docker tag -f gcr.io/${GCR_BUCKET}/ide-proxy:testing gcr.io/${GCR_BUCKET}/ide-proxy
