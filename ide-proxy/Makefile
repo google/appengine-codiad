@@ -39,7 +39,7 @@ dev: build
 	docker tag -f google/ide-appengine gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
 	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy:$(user)-dev
 
-release: build
+release:
 	gcloud docker pull gcr.io/developer_tools_bundle/ide-proxy:testing
 	docker tag -f gcr.io/developer_tools_bundle/ide-proxy:testing gcr.io/developer_tools_bundle/ide-proxy
 	gcloud docker push gcr.io/developer_tools_bundle/ide-proxy
