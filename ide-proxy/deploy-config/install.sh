@@ -94,6 +94,6 @@ fi
 
 echo "from $IMAGE" > ./Dockerfile
 
-gcloud --quiet --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=remote'
+gcloud --quiet --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=local'
 
 rm -f ./Dockerfile
