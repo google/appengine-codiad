@@ -131,6 +131,7 @@
                       'Message from server: "' + info.message + '"');
           relatedBuffer.tabThumb.addClass('file-status-changed');
         } else if (info.status === 'success') {
+          var tabTitle = relatedBuffer.tabThumb.find('.label').prop('title');
           if (!info.data.file_info.exists) {
             relatedBuffer.tabThumb.find('.label').prop(
               'title', tabTitle + '  "File "'+ path +'" does not exist on the server."');
