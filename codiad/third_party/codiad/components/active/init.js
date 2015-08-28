@@ -124,6 +124,7 @@
       codiad.filemanager.fileInfo(path, function(info) {
         var relatedBuffer = _this.buffers[path];
         relatedBuffer.tabThumb.removeClass('file-status-changed');
+        relatedBuffer.tabThumb.find('.label').prop('title', path);
         info = $.parseJSON(info);
         if (info.status === 'error') {
           console.log('File "'+ path +'" does not exist on the server. ' +
@@ -131,13 +132,17 @@
           relatedBuffer.tabThumb.addClass('file-status-changed');
         } else if (info.status === 'success') {
           if (!info.data.file_info.exists) {
-            codiad.message.warning('File "'+ path +'" does not exist on the server.');
+            relatedBuffer.tabThumb.find('.label').prop(
+              'title', tabTitle + '  "File "'+ path +'" does not exist on the server."');
             relatedBuffer.tabThumb.addClass('file-status-changed');
           } else if (info.data.file_info.sha1 !== relatedBuffer.sha1) {
-            codiad.message.warning('File "'+ path +'" has been modified on the server. Try to reload the file.');
+            relatedBuffer.tabThumb.find('.label').prop(
+              'title', tabTitle + '  "File "'+ path +
+              '" has been modified on the server. Try to reload the file."');
             relatedBuffer.tabThumb.addClass('file-status-changed');
           } else if (!info.data.file_info.in_current_project) {
-            codiad.message.warning('File "'+ path +'" does not belong to the current project.');
+            relatedBuffer.tabThumb.find('.label').prop(
+              'title', tabTitle + '  "File "'+ path +'" does not belong to the current project."');
             relatedBuffer.tabThumb.addClass('file-status-changed');
           }
         }
