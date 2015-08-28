@@ -134,16 +134,16 @@
           var tabTitle = relatedBuffer.tabThumb.find('.label').prop('title');
           if (!info.data.file_info.exists) {
             relatedBuffer.tabThumb.find('.label').prop(
-              'title', tabTitle + '  "File "'+ path +'" does not exist on the server."');
+              'title', tabTitle + '  "File does not exist on the server."');
             relatedBuffer.tabThumb.addClass('file-status-changed');
           } else if (info.data.file_info.sha1 !== relatedBuffer.sha1) {
             relatedBuffer.tabThumb.find('.label').prop(
-              'title', tabTitle + '  "File "'+ path +
-              '" has been modified on the server. Try to reload the file."');
+              'title',
+              tabTitle +'  "File has been modified on the server. Try to reload the file."');
             relatedBuffer.tabThumb.addClass('file-status-changed');
           } else if (!info.data.file_info.in_current_project) {
             relatedBuffer.tabThumb.find('.label').prop(
-              'title', tabTitle + '  "File "'+ path +'" does not belong to the current project."');
+              'title', tabTitle + '  "File does not belong to the current project."');
             relatedBuffer.tabThumb.addClass('file-status-changed');
           }
         }
