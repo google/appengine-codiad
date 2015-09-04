@@ -12,7 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all: codiad
-
-codiad:
+build:
 	docker build -t google/codiad .

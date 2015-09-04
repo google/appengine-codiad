@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all: build
-
 build: create_codiad_image
 	docker build -t google/ide-appengine .
 	rm -f ./codiad.tgz.part.*

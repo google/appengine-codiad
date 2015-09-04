@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all:
+build:
 	docker build -t google/dind .
 
-push:
+push: build
 	docker tag -f google/dind gcr.io/developer_tools_bundle/dind
 	gcloud docker push gcr.io/developer_tools_bundle/dind
 

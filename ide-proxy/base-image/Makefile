@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all:
+build:
 	docker build -t google/ide-frontend-base-image .
 
-push:
+push: build
 	docker tag -f google/ide-frontend-base-image gcr.io/developer_tools_bundle/ide-frontend-base-image
 	gcloud docker push gcr.io/developer_tools_bundle/ide-frontend-base-image
 
