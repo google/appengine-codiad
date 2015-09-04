@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #!/bin/bash
-export IDE_IMAGE=codiad
+export IDE_IMAGE=google/codiad
 export PROJECT=$(curl http://metadata.google.internal/computeMetadata/v1/project/project-id -H "Metadata-Flavor: Google")
 
 cd /app

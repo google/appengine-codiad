@@ -13,6 +13,12 @@
 # limitations under the License.
 
 all:
-	docker build -t ide-frontend-base-image .
-	docker tag -f ide-frontend-base-image gcr.io/developer_tools_bundle/ide-frontend-base-image
+	docker build -t google/ide-frontend-base-image .
+
+push:
+	docker tag -f google/ide-frontend-base-image gcr.io/developer_tools_bundle/ide-frontend-base-image
 	gcloud docker push gcr.io/developer_tools_bundle/ide-frontend-base-image
+
+pull:
+	gcloud docker pull gcr.io/developer_tools_bundle/ide-frontend-base-image
+	docker tag -f gcr.io/developer_tools_bundle/ide-frontend-base-image google/ide-frontend-base-image

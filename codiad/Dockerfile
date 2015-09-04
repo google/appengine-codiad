@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM gcr.io/developer_tools_bundle/codiad-base-image
+FROM google/codiad-base-image
 
 # Installing term.js
 ADD third_party/term.js /term.js

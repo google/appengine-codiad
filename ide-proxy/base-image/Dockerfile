@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM gcr.io/developer_tools_bundle/dev-common
+FROM google/dev-common
 
 ENV DEBIAN_FRONTEND noninteractive
 

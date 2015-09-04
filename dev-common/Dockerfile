@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM gcr.io/developer_tools_bundle/dind
+FROM google/dind
 
 # Install common development packages.
 ENV DEBIAN_FRONTEND noninteractive

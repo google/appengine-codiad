@@ -14,5 +14,11 @@
 
 all:
 	docker build -t google/dind .
+
+push:
 	docker tag -f google/dind gcr.io/developer_tools_bundle/dind
 	gcloud docker push gcr.io/developer_tools_bundle/dind
+
+pull:
+	gcloud docker pull gcr.io/developer_tools_bundle/dind
+	docker tag -f gcr.io/developer_tools_bundle/dind google/dind

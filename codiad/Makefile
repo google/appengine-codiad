@@ -15,4 +15,4 @@
 all: codiad
 
 codiad:
-	docker build -t codiad .
+	docker build -t google/codiad .

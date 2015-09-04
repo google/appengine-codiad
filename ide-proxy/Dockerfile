@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM gcr.io/developer_tools_bundle/ide-frontend-base-image
+FROM google/ide-frontend-base-image
 
 ADD package.json /app/
 ADD server.js /app/

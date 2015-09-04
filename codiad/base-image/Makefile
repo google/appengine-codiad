@@ -13,6 +13,12 @@
 # limitations under the License.
 
 all:
-	docker build -t codiad-base-image .
-	docker tag -f codiad-base-image gcr.io/developer_tools_bundle/codiad-base-image
+	docker build -t google/codiad-base-image .
+
+push:
+	docker tag -f google/codiad-base-image gcr.io/developer_tools_bundle/codiad-base-image
 	gcloud docker push gcr.io/developer_tools_bundle/codiad-base-image
+
+pull:
+	gcloud docker pull gcr.io/developer_tools_bundle/codiad-base-image
+	docker tag -f gcr.io/developer_tools_bundle/codiad-base-image google/codiad-base-image

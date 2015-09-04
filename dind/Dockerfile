@@ -55,7 +55,7 @@ RUN apt-key adv \
         --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        lxc-docker-1.5.0 && \
+        lxc-docker-1.6.2 && \
     apt-get clean
 # Some Google Cloud SDK components (Maven gcloud:deploy plugin in particular)
 # rely on DOCKER_HOST to be explicitly set, so set that.

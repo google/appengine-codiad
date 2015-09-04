@@ -21,7 +21,7 @@ build: create_codiad_image
 create_codiad_image:
 	$(MAKE) -C ../codiad/
 # Save codiad docker image and zip it and split it into 30MBytes chunks:
-	docker save codiad | gzip -c | split -b 30m - codiad.tgz.part.
+	docker save google/codiad | gzip -c | split -b 30m - codiad.tgz.part.
 
 deploy_requirements:
 	if [ -z "${PROJECT}" ]; then echo "Usage: make <target> PROJECT=<YOUR_GCP_PROJECT>"; exit 1; fi
