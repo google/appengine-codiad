@@ -27,8 +27,6 @@ builder:
 
     cd ide-proxy
 
-    make build
-
     make testing PROJECT=developer-tools-bundle
 
   $class: !shell
