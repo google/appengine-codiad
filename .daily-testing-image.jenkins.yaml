@@ -24,9 +24,8 @@ hasCustomWorkspace: false
   spec: 30-45 6 * * *
 builder:
   command: apt-get install make
-
     cd ide-proxy
-
+    make build
     make testing PROJECT=developer-tools-bundle
 
   $class: !shell
