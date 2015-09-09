@@ -24,13 +24,21 @@ hasCustomWorkspace: false
   spec: 30-45 5 * * 1
 builder:
   command: apt-get install make
+
     cd dev-common
+
     make pull
+
     cd codiad/base-image
+
     make build
+
     make push
+
     cd ../../ide-proxy/base-image
+
     make build
+
     make push
 
   $class: !shell
