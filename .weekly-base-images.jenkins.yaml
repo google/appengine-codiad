@@ -1,0 +1,41 @@
+logrotate: false
+buildDiscarder:
+  $class: !by-name Log Rotation
+properties:
+  !key:by-name Rebuild Settings:
+    autoRebuild: false
+    rebuildDisabled: false
+  !key:by-name Throttle Concurrent Builds:
+    throttleEnabled: false
+    throttleOption: project
+    maxConcurrentTotal: 0
+    maxConcurrentPerNode: 0
+disable: false
+concurrentBuild: false
+hasSlaveAffinity: false
+hasCustomQuietPeriod: false
+quiet_period: 5
+hasCustomScmCheckoutRetryCount: false
+scmCheckoutRetryCount: 0
+blockBuildWhenUpstreamBuilding: false
+blockBuildWhenDownstreamBuilding: false
+hasCustomWorkspace: false
+!key:by-name Build periodically:
+  spec: 30-45 5 * * 1
+builder:
+  command: apt-get install make
+
+    cd codiad/base-image
+
+    make build
+
+    make push
+
+    cd ../../ide-proxy/base-image
+
+    make build
+
+    make push
+
+  $class: !shell
+$class: !freestyle
