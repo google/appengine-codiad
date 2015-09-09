@@ -18,8 +18,6 @@
 PROJECT=$1
 RELEASE=$2
 
-USER_TAG=$(git config user.email | sed -e "s/@/-at-/" -e "s/\\./-dot-/g")
-
 VERSION=1
 
 # Local tag for the Docker image we deploy
@@ -73,12 +71,12 @@ EOF
 
 # If there is no release is specified then use the local image:
 if [ -z $RELEASE ]; then
-  RELEASE=${USER_TAG}
-  IMAGE="gcr.io/${PROJECT}/ide-proxy:${RELEASE}"
-  docker tag -f ${LOCAL_DOCKER_IMAGE} $IMAGE
-  gcloud docker push $IMAGE
+  echo "Deploying the local image: ${LOCAL_DOCKER_IMAGE}"
 else
-  IMAGE="gcr.io/${PROJECT}/ide-proxy:${RELEASE}"
+  IMAGE="gcr.io/developer-tools-bundle/ide-proxy:${RELEASE}"
+  echo "Deploying image: ${IMAGE}"
+  gcloud docker pull ${IMAGE}
+  docker tag -f ${IMAGE} ${LOCAL_DOCKER_IMAGE}
 fi
 
 if ! defaultModuleExists $PROJECT; then
@@ -92,7 +90,7 @@ if [ -z "$(gcloud --project=${PROJECT} compute networks list | grep codiad)" ]; 
   gcloud --project="${PROJECT}" compute networks create codiad
 fi
 
-echo "from $IMAGE" > ./Dockerfile
+echo "from ${LOCAL_DOCKER_IMAGE}" > ./Dockerfile
 
 gcloud --quiet --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=local'
 
