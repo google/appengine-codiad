@@ -13,4 +13,5 @@
 # limitations under the License.
 
 build:
+	$(MAKE) -C ./base-image pull
 	docker build -t google/codiad .
