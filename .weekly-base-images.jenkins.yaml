@@ -29,7 +29,7 @@ builder:
 
     make pull
 
-    cd codiad/base-image
+    cd ../codiad/base-image
 
     make build
 
