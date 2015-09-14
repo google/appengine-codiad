@@ -40,7 +40,7 @@ RUN go get github.com/google/git-appraise/git-appraise
 
 RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator
 
-ENV KYTHE_VERSION v0.0.11
+ENV KYTHE_VERSION v0.0.12
 RUN wget -P /tmp https://github.com/google/kythe/releases/download/${KYTHE_VERSION}/kythe-${KYTHE_VERSION}.tar.gz && \
     tar xvfz /tmp/kythe-${KYTHE_VERSION}.tar.gz -C /tmp/ && \
     mkdir -p /opt/kythe && cp -R /tmp/kythe-${KYTHE_VERSION}/* /opt/kythe && \
