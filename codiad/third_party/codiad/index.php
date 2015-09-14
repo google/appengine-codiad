@@ -295,6 +295,8 @@ if(!isset($_SESSION['user'])){
         <div class="sb-left-content">
           <div id="file-manager"></div>
         </div>
+        <div class="bottom-bar">
+        </div>
       </div>
     </div>
     <div class="ui-layout-center">
@@ -312,7 +314,7 @@ if(!isset($_SESSION['user'])){
       <div id="editor-region">
         <div id="root-editor-wrapper" class="editor"></div>
       </div>
-      <div id="editor-bottom-bar">
+      <div class="bottom-bar" id="editor-bottom-bar">
         <div id="current-file"></div>
         <div style="float: right">
           <div class="divider"></div>

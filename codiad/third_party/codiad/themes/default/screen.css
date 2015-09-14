@@ -371,7 +371,7 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
   bottom: 0;
 }
 
-#editor-bottom-bar {
+.bottom-bar {
   display: table-row;
   position: absolute;
   bottom: 0;
