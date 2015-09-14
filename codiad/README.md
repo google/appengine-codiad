@@ -7,7 +7,7 @@
 ## How to run locally?
 
 ``` sh
-make codiad
+make build
 mkdir /tmp/ide-ws
 docker run -e USER_EMAIL=youremail@company.com --privileged -d -v /tmp/ide-ws:/usr/share/nginx/www/_ -p 10000:8080 google/codiad
 ```
