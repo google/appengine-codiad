@@ -708,7 +708,7 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
   padding: 0;
   background-clip: content-box;
   box-shadow: 0 0 15px 0;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 
 #modal #drag-handle {
