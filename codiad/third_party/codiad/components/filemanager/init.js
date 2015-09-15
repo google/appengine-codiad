@@ -23,6 +23,7 @@
     controller: 'components/filemanager/controller.php',
     dialog: 'components/filemanager/dialog.php',
     dialogUpload: 'components/filemanager/dialog_upload.php',
+    fileSelectBoxCreated: false,
 
     init: function() {
       // Initialize node listener
@@ -744,6 +745,45 @@
           }
           $('#filemanager-search-processing').hide();
         });
+      });
+    },
+
+    listAllFiles: function(callback) {
+      $.get(codiad.filemanager.controller,
+            { action: 'list_all_files', path: codiad.project.getCurrent()}, function(data) {
+        var files = codiad.jsend.parse(data);
+        if (files != 'error') {
+          callback(files);
+        }
+      });
+    },
+
+    autoCompleteFiles: function() {
+      var _this = this;
+      $('#current-file').hide();
+      $('#search-file-box').show();
+      if (!this.fileSelectBoxCreated) {
+        $('.chosen-file-select').chosen({search_contains: true});
+        $('.chosen-file-select').on('chosen:hiding_dropdown', function(evt, params) {
+          $('#current-file').show();
+          $('#search-file-box').hide();
+        });
+        $('.chosen-file-select').on('change', function(evt, params) {
+          _this.openFile(codiad.project.getCurrent() + '/' +
+                         $('.chosen-file-select :selected').text(), true);
+        });
+        this.fileSelectBoxCreated = true;
+      }
+      this.listAllFiles(function(files) {
+        $('.chosen-file-select').find('option').remove();
+        $('.chosen-file-select').append('<option value=""></option>');
+        files.forEach(function(f) {
+          $('.chosen-file-select').append('<option value="'+f+'">'+f+'</option>');
+        });
+        $('.chosen-file-select').trigger('chosen:updated');
+        setTimeout(function() {
+          $('.chosen-file-select').trigger('chosen:open');
+        }, 10);
       });
     },
 
