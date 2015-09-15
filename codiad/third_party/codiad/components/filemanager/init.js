@@ -23,7 +23,6 @@
     controller: 'components/filemanager/controller.php',
     dialog: 'components/filemanager/dialog.php',
     dialogUpload: 'components/filemanager/dialog_upload.php',
-    fileSelectBoxCreated: false,
 
     init: function() {
       // Initialize node listener
@@ -745,16 +744,6 @@
           }
           $('#filemanager-search-processing').hide();
         });
-      });
-    },
-
-    listAllFiles: function(callback) {
-      $.get(codiad.filemanager.controller,
-            { action: 'list_all_files', path: codiad.project.getCurrent()}, function(data) {
-        var files = codiad.jsend.parse(data);
-        if (files != 'error') {
-          callback(files);
-        }
       });
     },
 

@@ -222,13 +222,6 @@ class Filemanager extends Common {
     $this->respond();
   }
 
-  public function list_all_files() {
-    $repo = Common::GetProjectRoot();
-    $ret = runShellCommand("find {$this->escapeShellArg($repo)} -type f -not ".
-                           "-iwholename '*.git/*' -follow -printf '%P\\n'");
-    echo formatJSEND('success', $ret->output);
-  }
-
   //////////////////////////////////////////////////////////////////
   // OPEN (Returns the contents of a file)
   //////////////////////////////////////////////////////////////////
