@@ -20,8 +20,8 @@ appengine. Proxy code can be found under `ide-proxy` directory.
 ## Included extras
 
 - Kythe: used for source code indexing.
-    The current included version is 0.0.8(https://github.com/google/kythe/releases/tag/v0.0.8).
     Kythe is installed by downloading its .tar.gz image from the github repository.
+    We try to keep up with latest release of Kythe from https://github.com/google/kythe/releases/.
 - Shipshape: for providing lint messages in IDE.
     Shipshape is installed by downloading its command line program from their public GCS bucket.
 - Web terminal: A customized version of term.js(https://github.com/chjj/term.js) is what we use in
