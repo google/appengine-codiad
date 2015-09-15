@@ -15,8 +15,7 @@ require_once('class.filemanager.php');
 checkSession();
 
 ?>
-<form class="codiad-form">
-  <?php
+<?php
 
 switch($_GET['action']){
 
@@ -24,59 +23,68 @@ switch($_GET['action']){
     // Create
     //////////////////////////////////////////////////////////////////
   case 'create':
-  ?>
+?>
+<form class="codiad-form">
   <input type="hidden" name="path" value="<?php echo($_GET['path']); ?>">
   <input type="hidden" name="type" value="<?php echo($_GET['type']); ?>">
   <label><span class="icon-pencil"></span><?php echo i18n((ucfirst($_GET['type']))); ?></label>
   <input type="text" name="object_name" autofocus="autofocus" autocomplete="off">
   <button class="codiad "><?php i18n("Create"); ?></button>
   <button class="codiad " onclick="codiad.modal.unload(); return false;"><?php i18n("Cancel"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
     //////////////////////////////////////////////////////////////////
     // Rename
     //////////////////////////////////////////////////////////////////
   case 'rename':
-  ?>
+?>
+<form class="codiad-form">
   <input type="hidden" name="path" value="<?php echo($_GET['path']); ?>">
   <input type="hidden" name="type" value="<?php echo($_GET['type']); ?>">
   <label><span class="icon-pencil"></span> <?php i18n("Rename"); ?> <?php echo i18n((ucfirst($_GET['type']))); ?></label>
   <input type="text" name="object_name" autofocus="autofocus" autocomplete="off" value="<?php echo($_GET['short_name']); ?>">
   <button class="codiad "><?php i18n("Rename"); ?></button>
   <button class="codiad " onclick="codiad.modal.unload(); return false;"><?php i18n("Cancel"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
     //////////////////////////////////////////////////////////////////
     // Delete
     //////////////////////////////////////////////////////////////////
   case 'delete':
-  ?>
+?>
+<form class="codiad-form">
   <input type="hidden" name="path" value="<?php echo($_GET['path']); ?>">
   <label><?php i18n("Are you sure you wish to delete the following:"); ?></label>
   <pre class="codiad"><?php if(!FileManager::isAbsPath($_GET['path'])) { echo '/'; }; echo($_GET['path']); ?></pre>
   <button class="codiad "><?php i18n("Delete"); ?></button>
   <button class="codiad " onclick="codiad.modal.unload();return false;"><?php i18n("Cancel"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
     //////////////////////////////////////////////////////////////////
     // Preview
     //////////////////////////////////////////////////////////////////
   case 'preview':
-  ?>
+?>
+<form class="codiad-form">
   <label><?php i18n("Inline Preview"); ?></label>
   <div><br><br><img src="<?php echo(str_replace(BASE_PATH . "/", "", WORKSPACE) . "/" . $_GET['path']); ?>"><br><br></div>
   <button class="codiad " onclick="codiad.modal.unload();return false;"><?php i18n("Close"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
     //////////////////////////////////////////////////////////////////
     // Overwrite
     //////////////////////////////////////////////////////////////////
   case 'overwrite':
-  ?>
+?>
+<form class="codiad-form">
   <input type="hidden" name="path" value="<?php echo($_GET['path']); ?>">
   <label><?php i18n("Would you like to overwrite or duplicate the following:"); ?></label>
   <pre class="codiad"><?php if(!FileManager::isAbsPath($_GET['path'])) { echo '/'; }; echo($_GET['path']); ?></pre>
@@ -86,14 +94,16 @@ switch($_GET['action']){
   </select>
   <button class="codiad "><?php i18n("Continue"); ?></button>
   <button class="codiad " onclick="codiad.modal.unload();return false;"><?php i18n("Cancel"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
     //////////////////////////////////////////////////////////////////
     // Search
     //////////////////////////////////////////////////////////////////
   case 'search':
-  ?>
+?>
+<form class="codiad-form">
   <input type="hidden" name="path" value="<?php echo($_GET['path']); ?>">
   <table class="codiad file-search-table">
     <tr>
@@ -123,14 +133,16 @@ switch($_GET['action']){
   <div id="filemanager-search-processing"></div>
   <button class="codiad "><?php i18n("Search"); ?></button>
   <button class="codiad " onclick="codiad.modal.unload();return false;"><?php i18n("Cancel"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
     //////////////////////////////////////////////////////////////////
     // Find files
     //////////////////////////////////////////////////////////////////
   case 'findFiles':
-  ?>
+?>
+<form class="codiad-form">
   <table class="codiad file-search-table">
     <tr>
       <td width="65%">
@@ -143,10 +155,28 @@ switch($_GET['action']){
   <div id="filemanager-search-processing"></div>
   <button class="codiad "><?php i18n("Find"); ?></button>
   <button class="codiad " onclick="codiad.modal.unload();return false;"><?php i18n("Cancel"); ?></button>
-  <?php
+</form>
+<?php
     break;
 
-}
-
-  ?>
+  case 'list_all_files':
+    $repo = Common::escapeShellArg(Common::GetProjectRoot());
+    $ret = runShellCommand("find $repo -type f -not -iwholename '*.git/*' ".
+                           " -follow -exec grep -Iq . {} \; -and -printf '%P\\n' | sort");
+?>
+<form>
+  <div id="search-file-box">
+    <select data-placeholder="Choose a file..." class="chosen-file-select">
+      <option value=""></option>
+      <?php
+    foreach($ret->output as $f) {
+      ?><option value="<?php echo $f;?>"><?php echo $f;?></option><?php
+    }
+      ?>
+    </select>
+  </div>
 </form>
+<?php
+    break;
+}
+?>

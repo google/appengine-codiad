@@ -319,27 +319,6 @@ if(!isset($_SESSION['user'])){
       <div class="bottom-bar" id="editor-bottom-bar">
         <div id="search-files" onclick="codiad.filemanager.autoCompleteFiles();"></div>
         <div class="divider"></div>
-        <div id="search-file-box" style="display: none;">
-          <form style="width: inherit; display: inline-block;">
-            <select data-placeholder="Choose a file..." class="chosen-file-select"
-                    style="width: 100%;
-                           border-radius: 2px;
-                           height: 1.55em;
-                           margin-top: -2px;
-                           -webkit-appearance: none;
-                           -moz-appearance: none;
-                           background-color: transparent;
-                           color: white;" tabindex="2">
-              <option value=""></option>
-              <option value="dind/Makefile">dind/Makefile</option>
-              <option value="dind/gce-sources.list">dind/gce-sources.list</option>
-              <option value="dind/onrun.sh">dind/onrun.sh</option>
-              <option value="AUTHORS">AUTHORS</option>
-              <option value="codiad/Dockerfile">codiad/Dockerfile</option>
-              <option value="codiad/third_party/codiad/js/codemirror/bin/lint">codiad/third_party/codiad/js/codemirror/bin/lint</option>
-            </select>
-          </form>
-        </div>
         <div id="current-file"></div>
         <div style="float: right">
           <div class="divider"></div>

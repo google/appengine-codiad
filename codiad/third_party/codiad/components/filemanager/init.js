@@ -760,27 +760,15 @@
 
     autoCompleteFiles: function() {
       var _this = this;
-      $('#current-file').hide();
-      $('#search-file-box').show();
-      if (!this.fileSelectBoxCreated) {
+      codiad.modal.load(700, this.dialog, {
+        action: 'list_all_files'
+      }, function() {
         $('.chosen-file-select').chosen({search_contains: true});
-        $('.chosen-file-select').on('chosen:hiding_dropdown', function(evt, params) {
-          $('#current-file').show();
-          $('#search-file-box').hide();
-        });
         $('.chosen-file-select').on('change', function(evt, params) {
-          _this.openFile(codiad.project.getCurrent() + '/' +
-                         $('.chosen-file-select :selected').text(), true);
+          console.log($('.chosen-file-select').val());
+          _this.openFile(codiad.project.getCurrent() + '/' + $('.chosen-file-select').val(), true);
+          codiad.modal.unload();
         });
-        this.fileSelectBoxCreated = true;
-      }
-      this.listAllFiles(function(files) {
-        $('.chosen-file-select').find('option').remove();
-        $('.chosen-file-select').append('<option value=""></option>');
-        files.forEach(function(f) {
-          $('.chosen-file-select').append('<option value="'+f+'">'+f+'</option>');
-        });
-        $('.chosen-file-select').trigger('chosen:updated');
         setTimeout(function() {
           $('.chosen-file-select').trigger('chosen:open');
         }, 10);

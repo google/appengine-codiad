@@ -168,7 +168,7 @@ form.codiad-form select,
 select.codiad option { background: #242424; }
 
 textarea.codiad {
-  min-height: 100px;
+  min-height: 80px;
 }
 
 form.codiad-form input:focus,
@@ -704,11 +704,10 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
   opacity: 1;
   background: #333;
   z-index: 9999999;
-  min-height: 100px;
+  min-height: 80px;
   padding: 0;
   background-clip: content-box;
-  border: 3px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, .9);
+  box-shadow: 0 0 15px 0;
   border-radius: 2px;
 }
 
@@ -906,7 +905,17 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
 }
 
 #search-file-box {
-  width: 80%;
-  float: left;
+  width: 98%;
+  height: 320px;
+}
+
+.chosen-file-select {
+  width: 100%;
+  border-radius: 2px;
+  height: 1.55em;
   margin-top: -2px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  color: white;
 }

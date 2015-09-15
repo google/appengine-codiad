@@ -56,7 +56,6 @@ $Filemanager->project = @$_SESSION['project'];
 switch($action){
   case 'index': $Filemanager->index(); break;
   case 'search': $Filemanager->search(); break;
-  case 'list_all_files': $Filemanager->list_all_files(); break;
   case 'find': $Filemanager->find(); break;
   case 'open' : $Filemanager->open(); break;
   case 'open_in_browser': $Filemanager->openinbrowser(); break;

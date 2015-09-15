@@ -114,8 +114,6 @@
           },
         });
         _this.layoutObject.allowOverflow('north');
-        _this.layoutObject.allowOverflow('south');
-        _this.layoutObject.allowOverflow('center');
 
         var $eastToggler = _this.layoutObject.togglers.east;
         $eastToggler.unbind('click');

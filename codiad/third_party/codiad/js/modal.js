@@ -8,7 +8,7 @@
 
   codiad.modal = {
 
-    load: function(width, url, data) {
+    load: function(width, url, data, callback) {
       data = data || {};
       $('#modal').css({'min-width': width + 'px'});
 
@@ -26,6 +26,9 @@
         } catch(err) {
         }
         $('#modal-content').html(data);
+        if (callback) {
+          callback();
+        }
         // Fix for Firefox autofocus goofiness
         $('input[autofocus="autofocus"]').focus();
       });
