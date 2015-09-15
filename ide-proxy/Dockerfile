@@ -18,7 +18,7 @@ ADD package.json /app/
 ADD server.js /app/
 ADD index.html /app/
 ADD start.sh /
-RUN chmod a+x /start.sh
+RUN chmod a+rx /start.sh
 ADD supervisord.conf /etc/supervisord.conf
 COPY ./codiad.tgz.part.* /app/
 
