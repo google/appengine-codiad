@@ -83,7 +83,7 @@
 
     list: function() {
       $(document).off('submit', '#modal-content form'); // Prevent form bubbling
-      codiad.modal.load(500, this.dialog + '?action=list');
+      codiad.modal.load(650, this.dialog + '?action=list');
     },
 
     //////////////////////////////////////////////////////////////////
