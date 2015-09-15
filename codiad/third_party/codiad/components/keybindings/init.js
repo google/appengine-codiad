@@ -71,7 +71,7 @@
       });
       // Find files [CTRL + Alt + O] ///////////////////////////////////////
       $.keyCombination(79, true, true, false, true, function() {
-        codiad.filemanager.findFiles(codiad.project.getCurrent());
+        codiad.filemanager.autoCompleteFiles();
       });
     }
   };

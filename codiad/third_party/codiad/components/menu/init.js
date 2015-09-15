@@ -28,7 +28,7 @@
          {label: 'Next file', key: 'Ctrl-.', command: 'cmd_nextFile'},
          {label: 'Prev file', key: 'Ctrl-,', command: 'cmd_prevFile'},
          {type: 'separator'},
-         {label: 'Search for file', key: 'Ctrl-Alt-O', command: 'cmd_searchFile'},
+         {label: 'Find files', key: 'Ctrl-Alt-O', command: 'cmd_searchFile'},
          {label: 'Search for text', key: 'Ctrl-Alt-F', command: 'cmd_searchText'},
          {type: 'separator'},
          {label: 'Settings', key: '', command: 'cmd_settings'},
@@ -200,7 +200,7 @@
     },
 
     cmd_searchFile: function() {
-      codiad.filemanager.findFiles(codiad.project.getCurrent());
+      codiad.filemanager.autoCompleteFiles();
     },
 
     cmd_searchText: function() {
