@@ -162,7 +162,7 @@ switch($_GET['action']){
   case 'list_all_files':
     $repo = Common::escapeShellArg(Common::GetProjectRoot());
     $ret = runShellCommand("find $repo -type f -not -iwholename '*.git/*' ".
-                           " -follow -exec grep -Iq . {} \; -and -printf '%P\\n' | sort");
+                           " -follow -printf '%P\\n' | sort");
 ?>
 <form>
   <div id="search-file-box">
