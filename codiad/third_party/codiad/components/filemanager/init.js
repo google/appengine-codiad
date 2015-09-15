@@ -754,9 +754,14 @@
       }, function() {
         $('.chosen-file-select').chosen({search_contains: true});
         $('.chosen-file-select').on('change', function(evt, params) {
-          console.log($('.chosen-file-select').val());
-          _this.openFile(codiad.project.getCurrent() + '/' + $('.chosen-file-select').val(), true);
+          // Saving the file path before unloading the select dialog:
+          var filePath = codiad.project.getCurrent() + '/' + $('.chosen-file-select').val();
           codiad.modal.unload();
+          // Doing opening after a delay because otherwise for file previews the modal.unload
+          // will close the preview window.
+          setTimeout(function() {
+            _this.openFile(filePath, true);
+          }, 50);
         });
         setTimeout(function() {
           $('.chosen-file-select').trigger('chosen:open');
