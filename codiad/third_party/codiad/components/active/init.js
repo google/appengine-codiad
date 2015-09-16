@@ -288,7 +288,7 @@
     setupCodeMirror: function() {
       CodeMirror.modeURL = this.modeURL;
       CodeMirror.commands.autocomplete = function(cm) {
-        cm.showHint({hint: CodeMirror.hint.anyword});
+        cm.showHint({hint: CodeMirror.hint.anyword, completeSingle: false});
       };
       CodeMirror.commands.jumpToLine = function(cm) {
         function dialog(cm, text, shortText, deflt, f) {
