@@ -20,8 +20,9 @@ scmCheckoutRetryCount: 0
 blockBuildWhenUpstreamBuilding: false
 blockBuildWhenDownstreamBuilding: false
 hasCustomWorkspace: false
-!key:by-name Build periodically:
-  spec: 30-45 6 * * *
+!key:by-name Poll SCM:
+  scmpoll_spec: * * * * *
+  ignorePostCommitHooks: false
 builder:
   command: apt-get update
 
@@ -29,7 +30,7 @@ builder:
 
     cd ide-proxy
 
-    make testing PROJECT=developer-tools-bundle
+    make build
 
   $class: !shell
 $class: !freestyle

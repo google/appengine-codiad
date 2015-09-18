@@ -23,7 +23,9 @@ hasCustomWorkspace: false
 !key:by-name Build periodically:
   spec: 30-45 5 * * 1
 builder:
-  command: apt-get install make
+  command: apt-get update
+
+    apt-get install -y -qq --no-install-recommends make
 
     cd dev-common
 
