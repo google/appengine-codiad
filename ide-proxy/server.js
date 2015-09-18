@@ -97,9 +97,7 @@ function syncWorkspace(email) {
   var syncProcess;
   var user_workspace = [process.env.IDE_DATA_DIR, 'workspaces', email].join('/');
   if (db[email].inInitialSync) {
-    mkdirp(user_workspace, function(err) {
-      console.log('mkdirp ' + user_workspace + ' finished. Error: ' + err);
-    });
+    mkdirp.sync(user_workspace);
     console.log('Running the initial workspace sync for: ' + email);
     // Runs an asyncronous process.
     // Copy from GCS bucket to IDE:
@@ -200,7 +198,7 @@ function tryCreateIDE(email) {
 function createIDE(user, callback) {
   if (user) {
     var user_workspace = [process.env.IDE_DATA_DIR, 'workspaces', user].join('/');
-    mkdirp(user_workspace, function(err) {});
+    mkdirp.sync(user_workspace);
     var docker_command = 'chmod a+rwX ' + user_workspace + ' && ' +
         'docker run --privileged -t -d -p 8080' + ' -v ' + user_workspace +
         ':/usr/share/nginx/www/_' + ' -e USER_EMAIL="' + user + '" ' + process.env.IDE_IMAGE;
