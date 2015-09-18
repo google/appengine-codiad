@@ -21,7 +21,7 @@ blockBuildWhenUpstreamBuilding: false
 blockBuildWhenDownstreamBuilding: false
 hasCustomWorkspace: false
 !key:by-name Poll SCM:
-  scmpoll_spec: * * * * *
+  scmpoll_spec: H * * * *
   ignorePostCommitHooks: false
 builder:
   command: apt-get update
