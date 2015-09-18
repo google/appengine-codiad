@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM google/ide-frontend-base-image
+FROM google/dev-common
 
 ADD package.json /app/
 ADD server.js /app/

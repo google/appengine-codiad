@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM google/codiad-base-image
+FROM google/dev-common
 
 # Installing term.js
 ADD third_party/term.js /term.js

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 build:
+	$(MAKE) -C ../dind build
 	docker build -t google/dev-common .
 
 push: build

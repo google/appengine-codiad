@@ -27,21 +27,10 @@ builder:
 
     apt-get install -y -qq --no-install-recommends make
 
-    cd dev-common
+    cd dind && make push
 
-    make pull
+    cd ../dev-common && make push
 
-    cd ../codiad/base-image
-
-    make build
-
-    make push
-
-    cd ../../ide-proxy/base-image
-
-    make build
-
-    make push
 
   $class: !shell
 $class: !freestyle
