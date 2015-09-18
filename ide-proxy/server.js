@@ -199,8 +199,8 @@ function createIDE(user, callback) {
   if (user) {
     var user_workspace = [process.env.IDE_DATA_DIR, 'workspaces', user].join('/');
     mkdirp.sync(user_workspace);
-    var docker_command = 'chmod a+rwX ' + user_workspace + ' && ' +
-        'docker run --privileged -t -d -p 8080' + ' -v ' + user_workspace +
+    var docker_command =
+        'docker run --privileged -d -p 8080' + ' -v ' + user_workspace +
         ':/usr/share/nginx/www/_' + ' -e USER_EMAIL="' + user + '" ' + process.env.IDE_IMAGE;
     exec(docker_command, function(error, stdout, stderr) {
       if (error) {
