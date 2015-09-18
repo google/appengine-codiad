@@ -13,4 +13,5 @@
 # limitations under the License.
 
 build:
+	$(MAKE) -C ../dev-common build
 	docker build -t google/codiad .
