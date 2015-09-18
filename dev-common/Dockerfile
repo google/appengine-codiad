@@ -71,7 +71,7 @@ RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
 RUN apt-get update && apt-get install -y nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Installing npm
+# Installing npm and some useful packages:
 RUN curl -L https://npmjs.com/install.sh | sh
 
 RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator
