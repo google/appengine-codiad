@@ -16,14 +16,6 @@ FROM google/dev-common
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \
-    apt-get install -y -qq --no-install-recommends build-essential supervisor \
-    git git-core make build-essential gcc python-dev python-setuptools && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN easy_install -U pip
-RUN pip install -U crcmod
-
 RUN curl -sL https://deb.nodesource.com/setup | bash -
 RUN apt-get install -y nodejs
 

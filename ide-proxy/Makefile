@@ -13,7 +13,6 @@
 # limitations under the License.
 
 build: create_codiad_image
-	$(MAKE) -C ./base-image/ pull
 	docker build -t google/ide-appengine .
 	rm -f ./codiad.tgz.part.*
 

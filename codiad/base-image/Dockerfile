@@ -18,33 +18,6 @@ FROM google/dev-common
 # Install base
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \
-    apt-get install -y -qq --no-install-recommends build-essential git nano supervisor \
-    nginx php5-dev php5-common php5-cli php5-fpm php5-gd php-pear openjdk-8-jdk vim \
-    bash-completion wget unzip python tmux screen gcc python-dev python-setuptools maven clang \
-    golang && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN easy_install -U pip
-# Required for GCS sync
-RUN pip install -U crcmod
-
-RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
-RUN apt-get update && apt-get install -y nodejs && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN curl -L https://npmjs.com/install.sh | sh
-
-# Adding tools
-ENV GOPATH /usr/local/
-RUN go get github.com/google/git-appraise/git-appraise
-
-RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator
-
-ENV KYTHE_VERSION v0.0.13
-RUN wget -P /tmp https://github.com/google/kythe/releases/download/${KYTHE_VERSION}/kythe-${KYTHE_VERSION}.tar.gz && \
-    tar xvfz /tmp/kythe-${KYTHE_VERSION}.tar.gz -C /tmp/ && \
-    mkdir -p /opt/kythe && cp -R /tmp/kythe-${KYTHE_VERSION}/* /opt/kythe && \
-    rm -rf /tmp/*
 
 # ------------------------------------------------------------------------------
 # Clean up APT when done.

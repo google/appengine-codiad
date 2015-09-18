@@ -20,28 +20,72 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         bash-completion \
+        build-essential \
         ca-certificates-java \
+        clang \
         cron \
         curl \
         emacs-nox \
+        gcc \
         git \
+        git-core \
+        golang \
         jq \
         less \
         locales \
+        make \
         man-db \
         manpages \
+        maven \
         mercurial \
         mysql-client \
         nano \
+        nginx \
+        openjdk-8-jdk \
         openjdk-8-jre-headless \
         openssh-server \
+        php5-cli \
+        php5-common \
+        php5-dev \
+        php5-fpm \
+        php5-gd \
+        php-pear \
         python \
+        python-dev \
+        python-setuptools \
+        screen \
         sudo \
+        supervisor \
+        tmux \
         unzip \
         vim \
         wget \
         zip && \
-    apt-get clean
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN easy_install -U pip
+RUN pip install -U crcmod
+
+# Installing nodejs 0.12
+RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
+RUN apt-get update && apt-get install -y nodejs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Installing npm
+RUN curl -L https://npmjs.com/install.sh | sh
+
+RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator
+
+# Adding git-appraise
+ENV GOPATH /usr/local/
+RUN go get github.com/google/git-appraise/git-appraise
+
+# Adding Kythe
+ENV KYTHE_VERSION v0.0.13
+RUN wget -P /tmp https://github.com/google/kythe/releases/download/${KYTHE_VERSION}/kythe-${KYTHE_VERSION}.tar.gz && \
+    tar xvfz /tmp/kythe-${KYTHE_VERSION}.tar.gz -C /tmp/ && \
+    mkdir -p /opt/kythe && cp -R /tmp/kythe-${KYTHE_VERSION}/* /opt/kythe && \
+    rm -rf /tmp/*
 
 # Install a UTF-8 locale by default.
 RUN echo "en_US.UTF-8 UTF-8" >/etc/locale.gen && \
