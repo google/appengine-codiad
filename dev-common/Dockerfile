@@ -74,7 +74,8 @@ RUN apt-get update && apt-get install -y nodejs && \
 # Installing npm and some useful packages:
 RUN curl -L https://npmjs.com/install.sh | sh
 
-RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator
+RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator webdriverio \
+    chromedriver
 
 # Adding git-appraise
 ENV GOPATH /usr/local/
