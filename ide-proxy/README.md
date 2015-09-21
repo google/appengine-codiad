@@ -14,6 +14,9 @@ The following tools must be installed on your system for deployment:
 - make
 - gcloud
 
+You can customize deployment parameters in `deploy-config` directory. In particular, customize
+`resources` based on your needs. See `deploy-config/app.yaml` file section `resources`.
+
 In order to deploy Codiad to a Google Cloud project run the following command in this directory:
 
     make deploy PROJECT=<Google Cloud project id>

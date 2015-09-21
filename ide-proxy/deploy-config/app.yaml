@@ -30,6 +30,7 @@ network:
 health_check:
   enable_health_check: False
 
+# Customize the resources based on your needs:
 resources:
   cpu: 4
   memory_gb: 16
