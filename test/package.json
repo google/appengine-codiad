@@ -1,9 +1,8 @@
 {
-  "name": "term.js",
-  "description": "A terminal written in javascript",
-  "author": "Christopher Jeffrey",
-  "version": "0.0.7",
-  "license": "MIT",
+  "name": "Codiad Tests",
+  "description": "Set of functional test cases for codiad.",
+  "author": "Amin Shali",
+  "version": "0.0.1",
   "main": "./index.js",
   "preferGlobal": false,
   "repository": "git://github.com/chjj/term.js.git",
