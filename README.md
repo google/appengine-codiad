@@ -2,7 +2,7 @@
 
 This repo defines a Docker Image that can be used to run Codiad on App Engine Managed VMs.
 
-## Codiad version
+## Codiad
 
 The image is using a heavily customized version of Codiad (https://github.com/Codiad/Codiad) which
 resides in `codiad/third_party/codiad` directory.
@@ -46,3 +46,45 @@ In order to do so, please see the `README.md` file in `codiad` directory.
 ### Deploying to a Google Cloud project
 
 Please see the instructions in `ide-proxy` directory.
+
+## How does it work?
+
+The IDE is deployed as a Managed VM (MVM) module into a cloud project. This module is responsible
+for handling requests coming from different users of the IDE and dispatching them to the right
+Codiad container. The general architecture of the system is as follows:
+
+```
+                       +      +----------------------------------+
+                       |      |                                  |
+User A +----------->   +----------------+      IDE Proxy         |
+                       |      |         |                        |
+                       |      |         |                        |
+User B +----------->   +--------------------------------+        |
+                       |      |         |               |        |
+                       |      |         |               |        |
+                       +      |         |               |        |
+                      MVM     |         |               |        |
+                      Auth    |         |               |        |
+                              |         |               |        |
+                              |    +----v------+  +-----v-----+  |
+                              |    | User A    |  | User B    |  |
+                              |    | Codiad    |  | Codiad    |  |
+                              |    | Container |  | Container |  |
+                              |    +-----------+  +-----------+  |
+                              +----------------------------------+
+```
+
+IDE proxy manages the codiad containers. It is respobsible for creating(and recreating) them and
+routing requests to them based on user's email address which is registered with the cloud project.
+
+### Security
+As can be seen in the above diagram, the authentication for each user is done by MVM. Users are
+authenticated with their cloud credential for the cloud project. The IDE is accessed by all users
+using the same secure URL, e.g. https://codiad-YOUR_CLOUD_PROJECT.appspot.com.
+
+The Codiad containers are run by project's service account and not by user's credential. No user's
+credential is stored anywhere in the container by the system.
+
+Codiad containers for all users are run in the same machine and there is no security boundary
+established for them. Hence a user `A`'s container could potentially access user `B`'s container.
+
