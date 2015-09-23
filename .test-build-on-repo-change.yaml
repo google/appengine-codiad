@@ -12,7 +12,8 @@ properties:
     maxConcurrentPerNode: 0
 disable: false
 concurrentBuild: false
-hasSlaveAffinity: false
+hasSlaveAffinity: true
+label: master
 hasCustomQuietPeriod: false
 quiet_period: 5
 hasCustomScmCheckoutRetryCount: false
@@ -26,11 +27,23 @@ hasCustomWorkspace: false
 builder:
   command: apt-get update
 
-    apt-get install -y -qq --no-install-recommends make
+    apt-get install -y -qq --no-install-recommends make curl
 
-    cd ide-proxy
+    cd codiad && make && cd ..
 
-    make build
+    cd test
+
+    curl -sL https://deb.nodesource.com/setup_0.12 | bash -
+
+    apt-get update && apt-get install -y nodejs
+
+    curl -L https://npmjs.com/install.sh | sh
+
+    npm install -g mocha
+
+    npm install expect.js webdriverio
+
+    mocha *.spec.js
 
   $class: !shell
 $class: !freestyle
