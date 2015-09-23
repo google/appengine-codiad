@@ -907,6 +907,7 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
 #search-file-box {
   width: 98%;
   height: 320px;
+  margin-top: 15px;
 }
 
 .chosen-file-select {
