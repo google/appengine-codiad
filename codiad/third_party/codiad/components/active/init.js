@@ -65,7 +65,8 @@
       foldGutter: true,
       smartIndent: true,
       gutters: [
-        "CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers", "CodeMirror-foldgutter"
+        "CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers",
+        "CodeMirror-foldgutter"
       ],
       lint: {
         lintOnChange: false
@@ -78,6 +79,7 @@
       rulers: [{column: 100, lineStyle: 'dashed'}],
       cursorScrollMargin: 50,
       autoRefresh: {delay: 300},
+      showHintOnInput: true,
     },
 
     modeURL: "js/codemirror/mode/%N/%N.min.js",
@@ -237,7 +239,7 @@
          'smartIndent', 'tabSize', 'indentWithTabs', 'keyMap',
          'styleActiveLine', 'extraKeys', 'showTrailingSpace',
          'autoCloseBrackets', 'autoCloseTags', 'matchBrackets',
-         'insertSoftTab', 'rulers'
+         'insertSoftTab', 'rulers', 'showHintOnInput'
         ],
         function(idx, key) {
           var localValue =
@@ -273,8 +275,8 @@
       $('body').ready(function() {
         if (visibleTabs) {
           if ($('#cm-visible-tab-css').length === 0) {
-            // The following css rule will be inserted into the body so that it decorates the tabs. This
-            // css is essentially an image of an arrow representing a tab.
+            // The following css rule will be inserted into the body so that it decorates the tabs.
+            // This css is essentially an image of an arrow representing a tab.
             var visibleTabsCSS = Handlebars.compile($("#cm-tab-visible-css-hb-template").html());
             $('body').append($(visibleTabsCSS()));
           }
@@ -300,7 +302,8 @@
           return false;
         }
         var queryDialog =
-            'Go to Line :  <input type="text" style="width: 10em"/> <span style="color: #888">(Press Enter)</span>';
+            'Go to Line :  <input type="text" style="width: 10em"/> ' +
+            '<span style="color: #888">(Press Enter)</span>';
 
         function goToLine(cm) {
           dialog(cm, queryDialog, "Go to Line:", 0, function(query) {
@@ -329,7 +332,8 @@
     populateEditorCommands: function () {
       this.editor.commands = {};
       for (var commandName in CodeMirror.commands) {
-        this.editor.commands[commandName] = CodeMirror.commands[commandName].bind(undefined, this.editor);
+        this.editor.commands[commandName] =
+          CodeMirror.commands[commandName].bind(undefined, this.editor);
       }
     },
 
@@ -338,9 +342,15 @@
       amplify.subscribe('settings.loaded', this, this.applySettings);
       amplify.subscribe('settings.save', this, this.applySettings);
       codiad.settings.load();
-      _this.setupCodeMirror();
+      this.setupCodeMirror();
       this.editor = CodeMirror(document.getElementById('root-editor-wrapper'),
                                _this.codeMirrorDefaultOptions);
+      this.editor.on('inputRead', function(cm, changeObj) {
+        if (_this.settings.showHintOnInput && changeObj.origin === '+input' &&
+            changeObj.text[0] !== ' ') {
+          CodeMirror.commands.autocomplete(cm);
+        }
+      });
       this.applySettings();
       this.populateEditorCommands();
 
@@ -869,7 +879,8 @@
           }
         }
       }
-      $.get(_this.controller + '?action=rename&old_path=' + oldPath + '&new_path=' + newPath, function() {
+      $.get(_this.controller + '?action=rename&old_path=' + oldPath + '&new_path=' + newPath,
+            function() {
         /* Notify listeners. */
         amplify.publish('active.onRename', {"oldPath": oldPath, "newPath": newPath});
       });

@@ -226,4 +226,15 @@ require_once('../../common.php');
       </select>
     </td>
   </tr>
+  <tr>
+    <td><?php i18n("Hints On Every Key"); ?></td>
+    <td>
+      <select class="codiad setting"
+              onchange="codiad.settings.setSettings()"
+              data-setting="codiad.settings.editor.showHintOnInput">
+        <option value="true" selected><?php i18n("Yes"); ?></option>
+        <option value="false"><?php i18n("No"); ?></option>
+      </select>
+    </td>
+  </tr>
 </table>
