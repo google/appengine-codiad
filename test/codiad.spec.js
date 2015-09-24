@@ -39,13 +39,22 @@ describe('Codiad Tests', function(){
   var codiadId;
 
   before(function(done) {
+    // Run the selenium image which is bundled with firefox:
     var output = spawnSync('docker',
                            ['run', '--net', 'host', '-d', '-P', 'selenium/standalone-firefox']);
     seleniumId = output.stdout.toString('utf8').trim();
+
+    // Make sure the google/codiad image is present locally:
+    output = spawnSync('docker', ['images', '-q', 'google/codiad']);
+    assert(output.stdout.toString('utf8').trim() !== '', 'google/codiad image is not available!');
+
+    // Run codiad
     output = spawnSync('docker', ['run', '-e', 'USER_EMAIL=youremail@company.com', '--privileged',
                                  '-d', '-v', CODIAD_WS + ':/usr/share/nginx/www/_', '-p',
                                  CODIAD_PORT + ':8080', 'google/codiad']);
     codiadId = output.stdout.toString('utf8').trim();
+
+    // Initialize a selenium client
     client = webdriverio.remote(options);
     client.init(done);
   });
