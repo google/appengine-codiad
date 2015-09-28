@@ -42,3 +42,6 @@
   word-wrap: break-word;
   box-shadow: 2px 2px 2px #888888;
 }
+.CodeMirror {
+  border: 1px solid transparent;
+}

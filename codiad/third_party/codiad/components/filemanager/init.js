@@ -601,7 +601,7 @@
               _this.repathSubs(path, newPath);
             }
             // Change any active files
-            codiad.active.rename(path, newPath);
+            codiad.active.rename(path, newPath, type);
             codiad.modal.unload();
           }
         });

@@ -161,6 +161,7 @@ foreach($plugins as $plugin){
     <script src="js/codemirror/addon/fold/comment-fold.min.js"></script>
     <script src="js/codemirror/addon/display/autorefresh.min.js"></script>
     <script src="js/codemirror/addon/display/rulers.min.js"></script>
+    <script src="js/codemirror/addon/display/panel.min.js"></script>
 
     <script src="js/codemirror/addon/comment/comment.min.js"></script>
     <script src="js/codemirror/addon/dialog/dialog.min.js"></script>
@@ -301,7 +302,7 @@ if(!isset($_SESSION['user'])){
         </div>
       </div>
     </div>
-    <div class="ui-layout-center">
+    <div class="ui-layout-center center-area">
       <div id="editor-top-bar">
         <ul id="tab-list-active-files"> </ul>
         <div id="tab-dropdown">
@@ -314,7 +315,8 @@ if(!isset($_SESSION['user'])){
       </div>
       <ul id="dropdown-list-active-files"></ul>
       <div id="editor-region">
-        <div id="root-editor-wrapper" class="editor"></div>
+        <div id="root-editor-wrapper" class="editor-wrapper ui-layout-center"></div>
+        <div id="editor-split-wrapper" class="editor-wrapper ui-layout-east"></div>
       </div>
       <div class="bottom-bar" id="editor-bottom-bar">
         <div id="search-files" onclick="codiad.filemanager.autoCompleteFiles();"></div>
@@ -328,11 +330,11 @@ if(!isset($_SESSION['user'])){
         </div>
       </div>
     </div>
-    <div class="ui-layout-east">
+    <div class="ui-layout-east east-area">
       <?php include 'components/review/index.php' ?>
       <?php include 'components/debugger/index.php' ?>
     </div>
-    <div class="ui-layout-south">
+    <div class="ui-layout-south south-area">
       <?php include 'components/terminal/index.php' ?>
       <?php include 'components/kythe/index.php' ?>
     </div>

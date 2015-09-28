@@ -20,9 +20,9 @@
 
     resizeAll: function() {
       var _this = this;
-      var centerAreaHeight = $('.ui-layout-center').outerHeight();
-      var eastAreaHeight = $('.ui-layout-east').outerHeight();
-      var southAreaHeight = $('.ui-layout-south').outerHeight();
+      var centerAreaHeight = $('.center-area').outerHeight();
+      var eastAreaHeight = $('.east-area').outerHeight();
+      var southAreaHeight = $('.south-area').outerHeight();
       var topBottomHeight = $('#editor-bottom-bar').outerHeight() +
           $('#editor-top-bar').outerHeight();
       var reviewTopBarHeight = $('#review-top-bar').outerHeight();
@@ -33,6 +33,7 @@
       $('#kythe-pane').css({'height': (southAreaHeight) + 'px'});
       $('#debugger-content').css({'height': (eastAreaHeight - debuggerTopBarHeight) + 'px'});
       $('#root-editor-wrapper').css({'height': (centerAreaHeight - topBottomHeight) + 'px'});
+      $('#editor-split-wrapper').css({'height': (centerAreaHeight - topBottomHeight) + 'px'});
       _this.triggerResizeEvent();
     },
 
@@ -114,7 +115,25 @@
           },
         });
         _this.layoutObject.allowOverflow('north');
-
+        $('#editor-region').layout({
+          defaults: {
+            spacing_open: 14,
+            spacing_closed: 14,
+            togglerLength_open: 130,
+            togglerLength_closed: 130,
+            resizeWhileDragging: false,
+            enableCursorHotkey: false,
+          },
+          center: {
+            onresize_end: function() {
+              _this.resizeAll();
+            },
+          },
+          east: {
+            initClosed: true,
+            size: '50%',
+          },
+        });
         var $eastToggler = _this.layoutObject.togglers.east;
         $eastToggler.unbind('click');
         $eastToggler.find('.review-toggler').click(function(e) {

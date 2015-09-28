@@ -41,6 +41,9 @@
 
     jumpToDefinition: function(editor) {
       var cursor = editor.getCursor();
+      if (!codiad.active.activeBuffer) {
+        return;
+      }
       $.get(this.controller, {action: 'jump_to_definition',
                               filepath: codiad.active.activeBuffer.path,
                               line: cursor.line, column: cursor.ch},
@@ -57,6 +60,9 @@
     },
 
     showInfoCard: function(editor) {
+      if (!codiad.active.activeBuffer) {
+        return;
+      }
       var _this = this;
       var cursor = editor.getCursor();
       $.get(this.controller, {action: 'jump_to_definition',
@@ -83,6 +89,9 @@
         });
       } else {
         doc.kytheMarks = [];
+      }
+      if (!codiad.active.activeBuffer) {
+        return;
       }
       var cursor = doc.indexFromPos(cm.getCursor());
       $.get(this.controller, {action: 'get_local_refs',

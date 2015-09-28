@@ -920,3 +920,11 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
   background-color: transparent;
   color: white;
 }
+
+#editor-region .ui-layout-toggler {
+  background-color: aliceblue;
+}
+
+.editor-in-focus {
+  border: 1px solid red !important;
+}

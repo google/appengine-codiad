@@ -26,6 +26,9 @@
       // Register shipshape linter in CodeMirror
       var shipshapeRunner = function(fileContent, updateLinting, options, cm) {
         // If file is saved then run the shipshape. Otherwise skip.
+        if (!codiad.active.activeBuffer) {
+          return;
+        }
         if (!codiad.active.activeBuffer.changed) {
           _this.runShipshape(codiad.active.activeBuffer.path, updateLinting, options, cm);
         }
@@ -50,6 +53,9 @@
       // Make a post call to linter controller
       $.get(_this.controller, {action: 'run', filepath: filePath},
              function(data) {
+        if (!codiad.active.activeBuffer) {
+          return;
+        }
         // User can switch the active file, if that happens we don't want to show
         // shipshape results in a wrong editor. The following if guards against that.
         if (filePath === codiad.active.activeBuffer.path) {

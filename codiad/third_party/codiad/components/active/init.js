@@ -32,8 +32,11 @@
     settings: [],
 
     editor: null,
+    centerEditor: null,
+    eastEditor: null,
 
     activeBuffer: null,
+    scratchBuffer: null,
 
     codeMirrorDefaultOptions: {
       styleActiveLine: true,
@@ -108,7 +111,6 @@
       }
       CodeMirror.autoLoadMode(this.editor, mode);
       this.editor.setOption('mode', spec);
-      this.showMode(spec);
       return spec;
     },
 
@@ -154,14 +156,14 @@
 
     changeBuffer: function(path) {
       this.activeBuffer = this.buffers[path];
-      this.editor.swapDoc(this.activeBuffer.doc);
+      if (this.editor == this.eastEditor) {
+        this.editor.swapDoc(this.activeBuffer.linkedDoc);
+      } else {
+        this.editor.swapDoc(this.activeBuffer.doc);
+      }
       this.editor.setOption('readOnly', this.activeBuffer.readonly);
-      this.cursorTracking(this.activeBuffer.doc);
       this.checkFileStatus(path);
-      split = this.splitDirectoryAndFileName(path);
-      $('#current-file').html(
-        '<span style="color:grey;">' + split.directory +
-        '</span>' + split.fileName);
+      this.displayCurrentFileName(path);
       this.selectMode(this.getFileName(path));
       CodeMirror.commands.clearSearch(this.editor);
     },
@@ -172,6 +174,12 @@
       return d;
     },
 
+    displayCurrentFileName: function(path) {
+      var split = this.splitDirectoryAndFileName(path);
+      $('#current-file').html('<span style="color:grey;">' + split.directory +
+        '</span>' + split.fileName);
+    },
+
     /**
      * fileData{ path, content, mtime, sha1 }
      */
@@ -180,7 +188,6 @@
       var path = fileData.path;
       var content = fileData.content;
       var mtime = fileData.mtime;
-      $('#root-editor-wrapper').show();
       if (focus === undefined) {
         focus = true;
       }
@@ -204,12 +211,7 @@
         codiad.message.success(i18n('Recovered unsaved content for: ') + path);
       }
 
-      var doc = this.newDoc(content);
-      var buffer = {
-        'doc': doc, 'path': path, 'serverMTime': mtime,
-        'sha1': fileData.sha1, 'untainted': content.slice(0),
-        'changed': false, 'readonly': readonly
-      };
+      var buffer = this.createBuffer(fileData, readonly, false);
       this.buffers[path] = buffer;
       this.add(path, buffer, focus);
       this.focus(path);
@@ -219,6 +221,21 @@
       this.editor.refresh();
       /* Notify listeners. */
       amplify.publish('active.onOpen', path);
+    },
+
+    createBuffer: function(fileData, readonly, scratch) {
+      var doc = this.newDoc(fileData.content);
+      doc.filepath = fileData.path;
+      var linkedDoc = doc.linkedDoc({sharedHist: true});
+      linkedDoc.filepath = fileData.path;
+      doc.scratch = true;
+      linkedDoc.scratch = true;
+      var buffer = {
+        'doc': doc, 'linkedDoc': linkedDoc, 'path': fileData.path, 'serverMTime': fileData.mtime,
+        'sha1': fileData.sha1, 'untainted': fileData.content.slice(0), 'changed': false,
+        'readonly': readonly
+      };
+      return buffer;
     },
 
     moveCursor: function(cursorOffset) {
@@ -252,13 +269,15 @@
             } else if (key === 'rulers') {
               localValue = JSON.parse(localValue);
             }
-            _this.editor.setOption(key, localValue);
+            _this.centerEditor.setOption(key, localValue);
+            _this.eastEditor.setOption(key, localValue);
             _this.settings[key] = localValue;
           } else {
             if (!_this.codeMirrorDefaultOptions[key]) {
               _this.codeMirrorDefaultOptions[key] = CodeMirror.defaults[key];
             }
-            _this.editor.setOption(key, _this.codeMirrorDefaultOptions[key]);
+            _this.centerEditor.setOption(key, _this.codeMirrorDefaultOptions[key]);
+            _this.eastEditor.setOption(key, _this.codeMirrorDefaultOptions[key]);
             _this.settings[key] = _this.codeMirrorDefaultOptions[key];
           }
         });
@@ -288,9 +307,16 @@
     },
 
     setupCodeMirror: function() {
+      var _this = this;
       CodeMirror.modeURL = this.modeURL;
       CodeMirror.commands.autocomplete = function(cm) {
         cm.showHint({hint: CodeMirror.hint.anyword, completeSingle: false});
+      };
+      CodeMirror.commands.autocompleteOnInput = function(cm, changeObj) {
+        if (_this.settings.showHintOnInput && changeObj.origin === '+input' &&
+            changeObj.text[0] !== ' ') {
+          CodeMirror.commands.autocomplete(cm);
+        }
       };
       CodeMirror.commands.jumpToLine = function(cm) {
         function dialog(cm, text, shortText, deflt, f) {
@@ -330,31 +356,67 @@
 
     // Allow more convenient access to editor commands.
     populateEditorCommands: function () {
-      this.editor.commands = {};
+      this.eastEditor.commands = {};
+      this.centerEditor.commands = {};
       for (var commandName in CodeMirror.commands) {
-        this.editor.commands[commandName] =
-          CodeMirror.commands[commandName].bind(undefined, this.editor);
+        this.eastEditor.commands[commandName] =
+          CodeMirror.commands[commandName].bind(undefined, this.eastEditor);
+        this.centerEditor.commands[commandName] =
+          CodeMirror.commands[commandName].bind(undefined, this.centerEditor);
+      }
+    },
+
+    focusOnEditor: function(ed) {
+      var _this = this;
+      if (ed == _this.eastEditor) {
+        _this.editor = _this.eastEditor;
+        $(_this.centerEditor.getWrapperElement()).removeClass('editor-in-focus');
+        $(_this.eastEditor.getWrapperElement()).addClass('editor-in-focus');
+      } else {
+        _this.editor = _this.centerEditor;
+        $(_this.eastEditor.getWrapperElement()).removeClass('editor-in-focus');
+        $(_this.centerEditor.getWrapperElement()).addClass('editor-in-focus');
+      }
+      var d = _this.editor.getDoc();
+      if (d.filepath) {
+        _this.focus(d.filepath);
+      } else if (d.scratch) {
+        _this.displayCurrentFileName('*scratch*');
       }
     },
 
     init: function() {
       var _this = this;
+      this.scratchBuffer = this.createBuffer({content: '', path: undefined, mtime: 0}, false, true);
       amplify.subscribe('settings.loaded', this, this.applySettings);
       amplify.subscribe('settings.save', this, this.applySettings);
       codiad.settings.load();
       this.setupCodeMirror();
-      this.editor = CodeMirror(document.getElementById('root-editor-wrapper'),
-                               _this.codeMirrorDefaultOptions);
-      this.editor.on('inputRead', function(cm, changeObj) {
-        if (_this.settings.showHintOnInput && changeObj.origin === '+input' &&
-            changeObj.text[0] !== ' ') {
-          CodeMirror.commands.autocomplete(cm);
-        }
+      this.centerEditor = CodeMirror(document.getElementById('root-editor-wrapper'),
+                                     _this.codeMirrorDefaultOptions);
+      this.centerEditor.swapDoc(this.scratchBuffer.doc);
+      this.eastEditor = CodeMirror(document.getElementById('editor-split-wrapper'),
+                                   _this.codeMirrorDefaultOptions);
+      this.eastEditor.swapDoc(this.scratchBuffer.linkedDoc);
+      this.editor = this.centerEditor;
+      this.eastEditor.on('focus', function() {
+        _this.focusOnEditor(_this.eastEditor);
       });
+      this.centerEditor.on('focus', function() {
+        _this.focusOnEditor(_this.centerEditor);
+      });
+      this.eastEditor.on('blur', function() {
+        $(_this.eastEditor.getWrapperElement()).removeClass('editor-in-focus');
+      });
+      this.centerEditor.on('blur', function() {
+        $(_this.centerEditor.getWrapperElement()).removeClass('editor-in-focus');
+      });
+      this.centerEditor.on('inputRead', CodeMirror.commands.autocompleteOnInput);
+      this.eastEditor.on('inputRead', CodeMirror.commands.autocompleteOnInput);
       this.applySettings();
       this.populateEditorCommands();
+      this.cursorTracking();
 
-      $('#root-editor-wrapper').hide();
       var er = $('#editor-region');
       er.on('e-resize-init', function(){
         _this.resizeHandler();
@@ -503,7 +565,8 @@
     },
 
     resizeHandler: function() {
-      this.editor.refresh();
+      this.centerEditor.refresh();
+      this.eastEditor.refresh();
       this.updateTabDropdownVisibility();
     },
 
@@ -622,7 +685,7 @@
         this.moveTabToDropdownMenu(tab, prependToTabList);
         this.moveDropdownMenuItemToTab(buffer.tabThumb, prependToTabList);
       } else if(this.history.length > 0) {
-        var prevPath = this.history[this.history.length-1];
+        var prevPath = this.history[this.history.length - 1];
         var prevBuffer = this.buffers[prevPath];
         if($('#dropdown-list-active-files').has(prevBuffer.tabThumb).length > 0) {
           /* Hide the dropdown menu if needed */
@@ -637,7 +700,7 @@
     //////////////////////////////////////////////////////////////////
 
     markChanged: function(buffer) {
-      if (!buffer.changed) {
+      if (buffer && !buffer.changed) {
         buffer.changed = true;
         buffer.tabThumb.addClass('changed');
       }
@@ -732,9 +795,9 @@
     },
 
     exterminate: function() {
-      $('#root-editor-wrapper').hide();
-      $('#current-file').html('');
-      $('#current-mode').html('');
+      this.centerEditor.swapDoc(this.scratchBuffer.doc);
+      this.eastEditor.swapDoc(this.scratchBuffer.linkedDoc);
+      $('#current-file').html('*scratch*');
       this.buffers = {};
       this.activeBuffer = null;
     },
@@ -791,11 +854,11 @@
     },
 
     close: function(path) {
+      var _this = this;
       /* Notify listeners. */
       amplify.publish('active.onClose', path);
 
-      var _this = this;
-      var buffer = _this.buffers[path];
+      var buffer = this.buffers[path];
 
       /* Animate only if the tabThumb if a tab, not a dropdown item. */
       if(buffer.tabThumb.hasClass('tab-item')) {
@@ -806,80 +869,87 @@
         });
       } else {
         buffer.tabThumb.remove();
-        _this.updateTabDropdownVisibility();
+        this.updateTabDropdownVisibility();
       }
 
       /* Remove closed path from history */
-      _this.removeHistory(path);
+      this.removeHistory(path);
+      this.removeBufferFromEditors(path);
+
+      $.get(this.controller + '?action=remove&path=' + path);
+      this.removeDraft(path);
+    },
+
+    removeBufferFromEditors: function(path) {
+      if (!this.buffers[path]) {
+        return;
+      }
+      var buffer = this.buffers[path];
+      if (buffer.linkedDoc.getEditor() == this.eastEditor) {
+        this.eastEditor.swapDoc(this.scratchBuffer.linkedDoc);
+      }
+      if (buffer.doc.getEditor() == this.centerEditor) {
+        this.centerEditor.swapDoc(this.scratchBuffer.doc);
+      }
       /* Select all the tab tumbs except the one which is to be removed. */
       var tabThumbs = $('#tab-list-active-files li[data-path!="' + path + '"]');
 
-      if (tabThumbs.length === 0 || _this.history.length === 0) {
-        _this.exterminate();
-      } else if (_this.history.length > 0) {
-        var nextPath = _this.history[_this.history.length - 1];
-        _this.focus(nextPath);
+      if (tabThumbs.length === 0 || this.history.length === 0) {
+        this.exterminate();
+      } else if (this.history.length > 0) {
+        var nextPath = this.history[this.history.length - 1];
+        this.focus(nextPath);
       }
-      delete _this.buffers[path];
-      $.get(_this.controller + '?action=remove&path=' + path);
-      _this.removeDraft(path);
-    },
-
-    showMode: function(mode) {
-      if (mode) {
-        $('#current-mode').html(mode);
-      } else {
-        $('#current-mode').html('text/plain');
-      }
+      delete this.buffers[path];
     },
 
     //////////////////////////////////////////////////////////////////
     // Process rename
     //////////////////////////////////////////////////////////////////
 
-    rename: function(oldPath, newPath) {
-      var _this = this;
-      var switchBuffers = function(oldPath, newPath) {
-        var tabThumb = _this.buffers[oldPath].tabThumb;
+    rename: function(oldPath, newPath, type /* 'directory' or 'file' */) {
+      var renameBuffers = function(oldPath, newPath) {
+        var tabThumb = this.buffers[oldPath].tabThumb;
         tabThumb.attr('data-path', newPath);
         var splitFileName = this.splitDirectoryAndFileName(newPath);
         tabThumb.find('.label').html(splitFileName.directory + '<span class="file-name">' +
                                      splitFileName.fileName + '</span>');
         tabThumb.find('.label').prop('title', newPath);
-        _this.buffers[newPath] = _this.buffers[oldPath];
-        _this.buffers[newPath].path = newPath;
-        if (_this.activeBuffer.path === oldPath) {
-          _this.activeBuffer = _this.buffers[newPath];
+        this.buffers[newPath] = this.buffers[oldPath];
+        this.buffers[newPath].path = newPath;
+        this.buffers[newPath].doc.filepath = newPath;
+        this.buffers[newPath].linkedDoc.filepath = newPath;
+        if (this.activeBuffer.path === oldPath) {
+          this.activeBuffer = this.buffers[newPath];
         }
-        delete _this.buffers[oldPath];
-        //Rename history
-        for (var i = 0; i < _this.history.length; i++) {
-          if (_this.history[i] === oldPath) {
-            _this.history[i] = newPath;
+        delete this.buffers[oldPath];
+        // Rename history
+        for (var i = 0; i < this.history.length; i++) {
+          if (this.history[i] === oldPath) {
+            this.history[i] = newPath;
           }
         }
       };
-      if (_this.buffers[oldPath]) {
-        // A file was renamed
-        switchBuffers.apply(this, [oldPath, newPath]);
-        var newBuffer = _this.buffers[newPath];
-
-        // Assuming the mode file has no dependencies
-        var oldDoc = newBuffer.doc;
-        newBuffer.doc = _this.newDoc(oldDoc.getValue());
-        newBuffer.doc.setHistory(oldDoc.getHistory());
-        newBuffer.doc.setCursor(oldDoc.getCursor());
-      } else {
+      if (type === 'file' && this.buffers[oldPath]) {
+        renameBuffers.apply(this, [oldPath, newPath]);
+      } else if (type === 'directory') {
         // A folder was renamed
-        var newKey;
-        for (var key in _this.buffers) {
-          newKey = key.replace(oldPath, newPath);
-          if (newKey !== key) {
-            switchBuffers.apply(this, [key, newKey]);
+        if (oldPath[oldPath.length - 1] !== '/') {
+          oldPath = oldPath + '/';
+        }
+        if (newPath[newPath.length - 1] !== '/') {
+          newPath = newPath + '/';
+        }
+        for (var key in this.buffers) {
+          if (key.indexOf(oldPath) === 0) {
+            var newKey = key.replace(oldPath, newPath);
+            if (newKey !== key) {
+              renameBuffers.apply(this, [key, newKey]);
+            }
           }
         }
       }
-      $.get(_this.controller + '?action=rename&old_path=' + oldPath + '&new_path=' + newPath,
+      $.get(this.controller + '?action=rename&old_path=' + oldPath + '&new_path=' + newPath,
             function() {
         /* Notify listeners. */
         amplify.publish('active.onRename', {"oldPath": oldPath, "newPath": newPath});
@@ -891,8 +961,7 @@
     //////////////////////////////////////////////////////////////////
 
     openInBrowser: function() {
-      var _this = this;
-      var path = _this.getPath();
+      var path = this.getPath();
       if (path) {
         codiad.filemanager.openInBrowser(path);
       } else {
@@ -905,21 +974,22 @@
     //////////////////////////////////////////////////////////////////
 
     getSelectedText: function() {
-      var _this = this;
-      var path = _this.getPath();
-      var buffer = _this.buffers[path];
+      var path = this.getPath();
+      var buffer = this.buffers[path];
 
-      if (path && _this.isOpen(path)) {
+      if (path && this.isOpen(path)) {
         return buffer.doc.getSelection();
       } else {
         codiad.message.error(i18n('No open files or selected text'));
       }
     },
 
-    cursorTracking: function(doc) {
-      if (!doc) return;
+    cursorTracking: function() {
+      var _this = this;
       clearInterval(this.cursorPoll);
       this.cursorPoll = setInterval(function() {
+        var doc = _this.editor.getDoc();
+        if (!doc) return;
         var cursorPos = doc.getCursor();
         $('#cursor-position').html(
           'Ln: ' + (cursorPos.line + 1) +
