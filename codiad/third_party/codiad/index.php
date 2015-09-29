@@ -136,7 +136,7 @@ foreach($plugins as $plugin){
     <script src="js/chosen/chosen.jquery.min.js"></script>
 
     <!-- Terminal -->
-    <script src="js/socket.io-1.3.5.js"></script>
+    <script src="js/socket.io-1.3.7.js"></script>
     <script src="shell/term.min.js"></script>
 
     <!-- CodeMirror -->
