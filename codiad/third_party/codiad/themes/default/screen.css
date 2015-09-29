@@ -764,6 +764,7 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
 
 .terminal-infocus {
   border: 1px solid red;
+  border-radius: 4px;
 }
 
 .terminal-cursor {
@@ -927,4 +928,5 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
 
 .editor-in-focus {
   border: 1px solid red !important;
+  border-radius: 4px;
 }
