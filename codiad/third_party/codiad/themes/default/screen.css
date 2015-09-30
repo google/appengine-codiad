@@ -485,6 +485,7 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
   color: whitesmoke;
   width: 80%;
   float: left;
+  font-weight: bold;
 }
 
 .divider {
