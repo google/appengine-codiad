@@ -105,6 +105,9 @@ foreach($plugins as $plugin){
     <link href="js/codemirror/theme/neo.min.css" rel="stylesheet" />
     <link href="js/codemirror/theme/night.min.css" rel="stylesheet" />
     <link href="js/codemirror/theme/ttcn.min.css" rel="stylesheet" />
+    <link href="js/codemirror/theme/icecoder.min.css" rel="stylesheet" />
+    <link href="js/codemirror/theme/liquibyte.min.css" rel="stylesheet" />
+    <link href="js/codemirror/theme/material.min.css" rel="stylesheet" />
     <link href="js/codemirror/addon/dialog/dialog.min.css" rel="stylesheet">
     <link href="js/codemirror/addon/search/matchesonscrollbar.min.css" rel="stylesheet">
     <link href="themes/default/codemirror.css" rel="stylesheet">
