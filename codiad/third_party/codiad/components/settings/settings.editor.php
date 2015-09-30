@@ -35,7 +35,6 @@ require_once('../../common.php');
           <option value="erlang-dark">erlang-dark</option>
           <option value="icecoder">icecoder</option>
           <option value="lesser-dark">lesser-dark</option>
-          <option value="liquibyte">liquibyte</option>
           <option value="material">material</option>
           <option value="mbo">mbo</option>
           <option value="midnight">midnight</option>
