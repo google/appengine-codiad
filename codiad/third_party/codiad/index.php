@@ -317,8 +317,12 @@ if(!isset($_SESSION['user'])){
       </div>
       <ul id="dropdown-list-active-files"></ul>
       <div id="editor-region">
-        <div id="root-editor-wrapper" class="editor-wrapper ui-layout-center"></div>
-        <div id="editor-split-wrapper" class="editor-wrapper ui-layout-east"></div>
+        <div id="root-editor-wrapper" class="editor-wrapper ui-layout-center">
+          <div id="center-editor-filepath-panel" class="filepath-editor-panel"></div>
+        </div>
+        <div id="editor-split-wrapper" class="editor-wrapper ui-layout-east">
+          <div id="east-editor-filepath-panel" class="filepath-editor-panel"></div>
+        </div>
       </div>
       <div class="bottom-bar" id="editor-bottom-bar">
         <div id="search-files" onclick="codiad.filemanager.autoCompleteFiles();"></div>

@@ -399,15 +399,33 @@
       this.editor = this.centerEditor;
       this.eastEditor.on('focus', function() {
         _this.focusOnEditor(_this.eastEditor);
+        $('#east-editor-filepath-panel').hide();
       });
       this.centerEditor.on('focus', function() {
         _this.focusOnEditor(_this.centerEditor);
+        $('#center-editor-filepath-panel').hide();
       });
       this.eastEditor.on('blur', function() {
         $(_this.eastEditor.getWrapperElement()).removeClass('editor-in-focus');
+        var d = _this.eastEditor.getDoc();
+        var panel = $('#east-editor-filepath-panel');
+        if (d.filepath) {
+          panel.text(d.filepath);
+        } else if (d.scratch) {
+          panel.text('*scratch*');
+        }
+        panel.show();
       });
       this.centerEditor.on('blur', function() {
         $(_this.centerEditor.getWrapperElement()).removeClass('editor-in-focus');
+        var d = _this.centerEditor.getDoc();
+        var panel = $('#center-editor-filepath-panel');
+        if (d.filepath) {
+          panel.text(d.filepath);
+        } else if (d.scratch) {
+          panel.text('*scratch*');
+        }
+        panel.show();
       });
       this.centerEditor.on('inputRead', CodeMirror.commands.autocompleteOnInput);
       this.eastEditor.on('inputRead', CodeMirror.commands.autocompleteOnInput);
