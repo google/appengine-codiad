@@ -347,17 +347,28 @@ if(!isset($_SESSION['user'])){
       <div id="modal-content"></div>
     </div>
     <iframe id="download"></iframe>
+    <script src="components/keybindings/init.js"></script>
+    <script src="components/worker_manager/init.js"></script>
+    <script src="components/layout/init.js"></script>
+    <script src="components/menu/init.js"></script>
+    <script src="components/terminal/init.js"></script>
+    <script src="components/poller/init.js"></script>
+    <script src="components/update/init.js"></script>
+    <script src="components/user/init.js"></script>
+    <script src="components/settings/init.js"></script>
+    <script src="components/project/init.js"></script>
+    <script src="components/filemanager/init.js"></script>
+    <script src="components/active/init.js"></script>
+    <script src="components/debugger/init.js"></script>
+    <script src="components/kythe/init.js"></script>
+    <script src="components/review/init.js"></script>
+    <script src="components/shipshape/init.js"></script>
+    <script src="components/tools/init.js"></script>
     <?php
 
   //////////////////////////////////////////////////////////////////
   // LOAD COMPONENTS
   //////////////////////////////////////////////////////////////////
-  foreach($components as $component) {
-    if(file_exists(COMPONENTS . "/" . $component . "/init.js")){
-      echo('<script src="components/'.$component.'/init.js"></script>');
-    }
-  }
-
   foreach($plugins as $plugin){
     if(file_exists(PLUGINS . "/" . $plugin . "/init.js")){
       echo('<script src="plugins/'.$plugin.'/init.js"></script>');
