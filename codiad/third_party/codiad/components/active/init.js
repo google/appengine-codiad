@@ -370,11 +370,9 @@
       var _this = this;
       if (ed == _this.eastEditor) {
         _this.editor = _this.eastEditor;
-        $(_this.centerEditor.getWrapperElement()).removeClass('editor-in-focus');
         $(_this.eastEditor.getWrapperElement()).addClass('editor-in-focus');
       } else {
         _this.editor = _this.centerEditor;
-        $(_this.eastEditor.getWrapperElement()).removeClass('editor-in-focus');
         $(_this.centerEditor.getWrapperElement()).addClass('editor-in-focus');
       }
       var d = _this.editor.getDoc();
