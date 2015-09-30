@@ -1,5 +1,8 @@
 # Codiad Managed VMs Docker Image
 
+![Screenshot of Codiad running on MVMs](/codiad-screenshot.png?raw=true "Screenshot of Codiad running on MVMs")
+
+
 This repo defines a Docker Image that can be used to run Codiad on App Engine Managed VMs.
 
 ## Codiad
