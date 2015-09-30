@@ -91,3 +91,6 @@ credential is stored anywhere in the container by the system.
 Codiad containers for all users are run in the same machine and there is no security boundary
 established for them. Hence a user `A`'s container could potentially access user `B`'s container.
 
+## Running Codiad Locally
+It is possible to run Codiad locally on a machine without using the IDE proxy and MVM hosting. In
+order to do so, see the `README.md` file in `codiad` directory.
