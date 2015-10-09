@@ -19,9 +19,10 @@ FROM google/dind
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        apt-transport-https \
         bash-completion \
         build-essential \
-        ca-certificates-java \
+        ca-certificates \
         clang \
         cron \
         curl \
@@ -33,6 +34,7 @@ RUN apt-get update && \
         jq \
         less \
         locales \
+        lsb-release \
         make \
         man-db \
         manpages \
@@ -53,6 +55,7 @@ RUN apt-get update && \
         python \
         python-dev \
         python-setuptools \
+        rlwrap \
         screen \
         sudo \
         supervisor \
@@ -66,13 +69,17 @@ RUN apt-get update && \
 RUN easy_install -U pip
 RUN pip install -U crcmod
 
-# Installing nodejs 0.12
-RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
-RUN apt-get update && apt-get install -y nodejs && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Installing node:
+RUN curl https://deb.nodesource.com/node_0.12/pool/main/n/nodejs/nodejs_0.12.7-1nodesource1~jessie1_amd64.deb > node.deb \
+ && dpkg -i node.deb \
+ && rm node.deb
 
-# Installing npm and some useful packages:
-RUN curl -L https://npmjs.com/install.sh | sh
+RUN npm install -g pangyp\
+ && ln -s $(which pangyp) $(dirname $(which pangyp))/node-gyp\
+ && npm cache clear\
+ && node-gyp configure || echo ""
+
+ENV NODE_ENV production
 
 RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator webdriverio \
       mocha expect.js
