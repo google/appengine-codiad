@@ -941,10 +941,8 @@ table.codiad [class^="icon-"], [class*=" icon-"] {
   color: black;
   position: absolute;
   font-size: 0.9em;
-  top: 0;
+  bottom: 0;
   opacity: 0.9;
   z-index: 999;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
   display: none;
 }
