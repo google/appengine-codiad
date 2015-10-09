@@ -9,6 +9,7 @@ Notable features:
  - File path panels at the top of editors.
 
 Notable changes:
+ - Bumping up the version of nodejs to 0.12.7.
  - Bumping up the version of socket.io to 1.3.7.
  - Bumping up the version of node-http-proxy to 1.11.2.
 
