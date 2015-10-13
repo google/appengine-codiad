@@ -30,6 +30,8 @@ appengine. Proxy code can be found under `ide-proxy` directory.
 - Web terminal: A customized version of term.js(https://github.com/chjj/term.js) is what we use in
     IDE to expose the underlying container. IDE is installed through a git submodule which resides
     in a Google cloud repository.
+- Git appraise: Integrated with git-appraise for sending code reviews.
+    See https://github.com/google/git-appraise for more information.
 
 ## Required Google Cloud API
 
