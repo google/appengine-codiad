@@ -25,7 +25,7 @@ manual_scaling:
   instances: 1
 
 network:
-  instance_tag: codiad
+  name: codiad
 
 health_check:
   enable_health_check: False

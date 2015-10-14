@@ -89,7 +89,7 @@ ENV GOPATH /usr/local/
 RUN go get github.com/google/git-appraise/git-appraise
 
 # Adding Kythe
-ENV KYTHE_VERSION v0.0.14
+ENV KYTHE_VERSION v0.0.15
 RUN wget -P /tmp https://github.com/google/kythe/releases/download/${KYTHE_VERSION}/kythe-${KYTHE_VERSION}.tar.gz && \
     tar xvfz /tmp/kythe-${KYTHE_VERSION}.tar.gz -C /tmp/ && \
     mkdir -p /opt/kythe && cp -R /tmp/kythe-${KYTHE_VERSION}/* /opt/kythe && \

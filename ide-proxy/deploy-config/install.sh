@@ -87,7 +87,7 @@ fi
 
 # Ensure that a private networks exists for IDE
 if [ -z "$(gcloud --project=${PROJECT} compute networks list | grep codiad)" ]; then
-  gcloud --project="${PROJECT}" compute networks create codiad
+  gcloud --project="${PROJECT}" compute networks create codiad --range "10.0.0.0/24"
 fi
 
 echo "from ${LOCAL_DOCKER_IMAGE}" > ./Dockerfile
