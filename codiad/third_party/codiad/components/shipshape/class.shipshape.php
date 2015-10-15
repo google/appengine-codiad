@@ -24,20 +24,14 @@ class Shipshape extends Common {
 
   public function Run() {
     $filepath = "{$this->root}/{$this->get['filepath']}";
-    // Truncate the output json file.
-    $fp = fopen("/tmp/shipshape-results.json", "w");
+    $tmpfname = tempnam("/tmp", "shipshape-results-");
+    $fp = fopen($tmpfname, "w");
     fclose($fp);
 
-    $ret = runShellCommand("shipshape --categories='go vet,JSHint,PyLint'".
-                           " --json_output=/tmp/shipshape-results.json".
+    $ret = runShellCommand("shipshape --categories='go vet,JSHint,PyLint' --json_output=$tmpfname".
                            " {$this->escapeShellArg($filepath)}");
-    if ($ret->exit_code !=0) {
-      // If for any reason shipshape command failed, we don't want to show error message.
-      // The reason could be simply that there is no reference at the requested position.
-      echo formatJSEND('success', 'Running shipshape failed.');
-      return;
-    }
-    echo formatJSEND('success', json_decode(file_get_contents('/tmp/shipshape-results.json')));
+    echo formatJSEND('success', json_decode(file_get_contents($tmpfname)));
+    unlink($tmpfname);
   }
 }
 
