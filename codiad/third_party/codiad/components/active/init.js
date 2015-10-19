@@ -223,13 +223,13 @@
       amplify.publish('active.onOpen', path);
     },
 
-    createBuffer: function(fileData, readonly, scratch) {
+    createBuffer: function(fileData, readonly, isScratch) {
       var doc = this.newDoc(fileData.content);
       doc.filepath = fileData.path;
       var linkedDoc = doc.linkedDoc({sharedHist: true});
       linkedDoc.filepath = fileData.path;
-      doc.scratch = true;
-      linkedDoc.scratch = true;
+      doc.isScratch = isScratch;
+      linkedDoc.isScratch = isScratch;
       var buffer = {
         'doc': doc, 'linkedDoc': linkedDoc, 'path': fileData.path, 'serverMTime': fileData.mtime,
         'sha1': fileData.sha1, 'untainted': fileData.content.slice(0), 'changed': false,
@@ -378,7 +378,7 @@
       var d = _this.editor.getDoc();
       if (d.filepath) {
         _this.focus(d.filepath);
-      } else if (d.scratch) {
+      } else if (d.isScratch) {
         _this.displayCurrentFileName('*scratch*');
       }
     },
@@ -411,7 +411,7 @@
         var panel = $('#east-editor-filepath-panel');
         if (d.filepath) {
           panel.text(d.filepath);
-        } else if (d.scratch) {
+        } else if (d.isScratch) {
           panel.text('*scratch*');
         }
         panel.show();
@@ -422,7 +422,7 @@
         var panel = $('#center-editor-filepath-panel');
         if (d.filepath) {
           panel.text(d.filepath);
-        } else if (d.scratch) {
+        } else if (d.isScratch) {
           panel.text('*scratch*');
         }
         panel.show();
@@ -589,6 +589,9 @@
     changeListener: function(doc) {
       var _this = this;
       doc.on('change', function(cmInstance, changeObject) {
+        if (doc.isScratch) {
+          return;
+        }
         if (!(changeObject.text && changeObject.removed &&
               changeObject.text.length === changeObject.removed.length === 0)) {
           _this.markChanged(_this.activeBuffer);
