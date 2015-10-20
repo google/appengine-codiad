@@ -39,7 +39,7 @@ wget http://storage.googleapis.com/shipshape-cli/shipshape -P /usr/local/bin/
 
 chmod +x /usr/local/bin/*
 
-shipshape --categories="go vet,JSHint,PyLint" /tmp &
+shipshape --hot_start --tag prod-2015-10-16-10-22-02 $HOME &
 
 mkdir -p /var/log/supervisor
 /usr/bin/supervisord -c /etc/supervisord.conf
