@@ -2,6 +2,9 @@
 
 ## Upcoming release
 
+Notable changes:
+ - Bumping up the version of codemirror to 5.8.0.
+
 ## v0.2-alpha
 
 Notable features:
