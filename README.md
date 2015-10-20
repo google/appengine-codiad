@@ -31,7 +31,8 @@ appengine. Proxy code can be found under `ide-proxy` directory.
     IDE to expose the underlying container. IDE is installed through a git submodule which resides
     in a Google cloud repository.
 - Git appraise: Integrated with git-appraise for sending code reviews.
-    See https://github.com/google/git-appraise for more information.
+    See https://github.com/google/git-appraise for more information. Here is a screenshot of
+    integration of this IDE with git appraise: ![Screenshot of a review in Codiad](/codiad-review-screenshot.png?raw=true "Screenshot of a review in Codiad")
 
 ## Required Google Cloud API
 
