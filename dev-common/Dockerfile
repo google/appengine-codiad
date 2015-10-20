@@ -74,15 +74,14 @@ RUN curl https://deb.nodesource.com/node_0.12/pool/main/n/nodejs/nodejs_0.12.7-1
  && dpkg -i node.deb \
  && rm node.deb
 
-RUN npm install -g pangyp\
- && ln -s $(which pangyp) $(dirname $(which pangyp))/node-gyp\
- && npm cache clear\
- && node-gyp configure || echo ""
+RUN npm install -g pangyp \
+ && ln -s $(which pangyp) $(dirname $(which pangyp))/node-gyp \
+ && npm cache clear || echo ""
 
 ENV NODE_ENV production
 
 RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator webdriverio \
-      mocha expect.js
+      mocha expect.js mysql
 
 # Adding git-appraise
 ENV GOPATH /usr/local/
@@ -116,9 +115,7 @@ ENV PATH $CLOUD_SDK/bin:$PATH
 # Disable the automatic update checks by Cloud SDK since the container
 # environment is assumed to be auto-managed, and we don't want to advertise
 # the manual update process too much.
-RUN gcloud config set \
-    --scope installation \
-    component_manager/disable_update_check True
+RUN gcloud config set --installation component_manager/disable_update_check True
 
 # Install the gcloud preview app support and Managed VMs.
 RUN yes | \
