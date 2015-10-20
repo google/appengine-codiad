@@ -131,6 +131,9 @@ RUN yes | \
         kubectl \
         preview
 
+# Unpin the fixed_sdk_version so that users can upgrade later if they want to.
+RUN gcloud config unset --installation component_manager/fixed_sdk_version
+
 # Git credential helpers for source.developers.google.com and Gerrit.
 ADD gitconfig /etc/gitconfig
 RUN chmod -R 644 /etc/gitconfig
