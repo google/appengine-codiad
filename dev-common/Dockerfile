@@ -122,7 +122,7 @@ RUN gcloud config set \
 
 # Install the gcloud preview app support and Managed VMs.
 RUN yes | \
-    gcloud components update \
+    CLOUDSDK_COMPONENT_MANAGER_FIXED_SDK_VERSION=0.9.79 gcloud components update -q \
         alpha \
         app \
         app-engine-java \
