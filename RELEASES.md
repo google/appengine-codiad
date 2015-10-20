@@ -5,6 +5,9 @@
 Notable changes:
  - Bumping up the version of codemirror to 5.8.0.
 
+Notable changes:
+ - Pinning down the version of gcloud to 0.9.79.
+
 ## v0.2-alpha
 
 Notable features:
