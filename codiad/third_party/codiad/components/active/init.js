@@ -22,6 +22,7 @@
 
   codiad.active = {
     ACTIVE_BUFFER_STATUS_CHECK_INTERVAL: 60000,
+    NO_SHOW_HINT_CHARS: [' ', ';', '{', '}', '[', ']', '(', ')', '!', '<', '>', '`', ',', ':'],
 
     controller: 'components/active/controller.php',
     // Path to EditSession instance mapping
@@ -314,7 +315,7 @@
       };
       CodeMirror.commands.autocompleteOnInput = function(cm, changeObj) {
         if (_this.settings.showHintOnInput && changeObj.origin === '+input' &&
-            changeObj.text[0] !== ' ') {
+            _this.NO_SHOW_HINT_CHARS.indexOf(changeObj.text[0]) === -1) {
           CodeMirror.commands.autocomplete(cm);
         }
       };
