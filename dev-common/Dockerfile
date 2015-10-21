@@ -70,18 +70,12 @@ RUN easy_install -U pip
 RUN pip install -U crcmod
 
 # Installing node:
-RUN curl https://deb.nodesource.com/node_0.12/pool/main/n/nodejs/nodejs_0.12.7-1nodesource1~jessie1_amd64.deb > node.deb \
- && dpkg -i node.deb \
- && rm node.deb
-
-RUN npm install -g pangyp \
- && ln -s $(which pangyp) $(dirname $(which pangyp))/node-gyp \
- && npm cache clear || echo ""
-
-ENV NODE_ENV production
+RUN wget https://nodejs.org/dist/v4.2.1/node-v4.2.1-linux-x64.tar.gz && \
+    tar xvfz node-v4.2.1-linux-x64.tar.gz && cp -R node-v4.2.1-linux-x64/* /usr/ && \
+    ln -f -s /usr/bin/node /usr/bin/nodejs && rm node-v4.2.1-linux-x64.tar.gz
 
 RUN npm install -g js-beautify uglify-js uglifycss firebase firebase-token-generator webdriverio \
-      mocha expect.js mysql
+      mocha expect.js
 
 # Adding git-appraise
 ENV GOPATH /usr/local/
