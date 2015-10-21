@@ -3,7 +3,7 @@
   "description": "IDE proxy",
   "version": "0.1.0",
   "dependencies": {
-    "http-proxy": "1.11.2",
+    "http-proxy": "1.11.3",
     "appengine": "git://github.com/GoogleCloudPlatform/appengine-nodejs.git",
     "mkdirp": "0.5.1"
   }
