@@ -14,6 +14,9 @@
 
 export SHELL=/bin/bash
 
+stty werase undef
+bind '"\C-w": backward-kill-word'
+
 if ! { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
 Y_BOLD=$(tput setaf 3; tput bold)
 NORMAL=$(tput sgr0)
