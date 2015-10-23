@@ -117,8 +117,8 @@
         _this.layoutObject.allowOverflow('north');
         $('#editor-region').layout({
           defaults: {
-            spacing_open: 14,
-            spacing_closed: 14,
+            spacing_open: 15,
+            spacing_closed: 15,
             togglerLength_open: 130,
             togglerLength_closed: 130,
             resizeWhileDragging: false,
@@ -132,6 +132,8 @@
           east: {
             initClosed: true,
             size: '50%',
+            togglerContent_closed: '||',
+            togglerContent_open: '||',
           },
         });
         var $eastToggler = _this.layoutObject.togglers.east;

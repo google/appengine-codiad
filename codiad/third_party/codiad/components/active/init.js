@@ -23,7 +23,7 @@
   codiad.active = {
     ACTIVE_BUFFER_STATUS_CHECK_INTERVAL: 60000,
     NO_SHOW_HINT_CHARS: [' ', ';', '{', '}', '[', ']', '(', ')', '!', '<', '>', '`', ',', ':', '/',
-                         '\\', '=', '-', '*', '^', '#', '@', '%', '&', '~'],
+                         '\\', '=', '-', '*', '^', '#', '@', '%', '&', '~', '|'],
 
     controller: 'components/active/controller.php',
     // Path to EditSession instance mapping
