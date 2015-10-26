@@ -20,12 +20,14 @@ RELEASE=$2
 
 VERSION=1
 
+alias gcloud='gcloud --quiet'
+
 # Local tag for the Docker image we deploy
 LOCAL_DOCKER_IMAGE="google/ide-appengine"
 
 function defaultModuleExists() {
   local project=$1
-  local count=$(gcloud --quiet preview app modules list default --project $project 2>&1 \
+  local count=$(gcloud preview app modules list default --project $project 2>&1 \
     | grep -o "^default" | wc -l)
   if [[ $count -gt 0 ]]; then
     return 0
@@ -62,7 +64,7 @@ EOF
 </html>
 EOF
   local status=1
-  gcloud --quiet preview app deploy --force --quiet --project $target_project \
+  gcloud preview app deploy --force --quiet --project $target_project \
     $tmp_dir/app.yaml --version v1
   [[ $? ]] && status=0 || echo "Failed to deploy default module to $target_project"
   rm -rf $tmp_dir
@@ -75,7 +77,7 @@ if [ -z $RELEASE ]; then
 else
   IMAGE="gcr.io/developer-tools-bundle/ide-proxy:${RELEASE}"
   echo "Deploying image: ${IMAGE}"
-  gcloud --quiet docker pull ${IMAGE}
+  gcloud docker pull ${IMAGE}
   docker tag -f ${IMAGE} ${LOCAL_DOCKER_IMAGE}
 fi
 
@@ -86,12 +88,12 @@ if ! defaultModuleExists $PROJECT; then
 fi
 
 # Ensure that a private networks exists for IDE
-if [ -z "$(gcloud --quiet --project=${PROJECT} compute networks list | grep codiad)" ]; then
-  gcloud --quiet --project="${PROJECT}" compute networks create codiad --range "10.0.0.0/24"
+if [ -z "$(gcloud --project=${PROJECT} compute networks list | grep codiad)" ]; then
+  gcloud --project="${PROJECT}" compute networks create codiad --range "10.0.0.0/24"
 fi
 
 echo "from ${LOCAL_DOCKER_IMAGE}" > ./Dockerfile
 
-gcloud --quiet --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=local'
+gcloud --project="${PROJECT}" preview app deploy --set-default --force --version=${VERSION} ./app.yaml '--docker-build=local'
 
 rm -f ./Dockerfile
