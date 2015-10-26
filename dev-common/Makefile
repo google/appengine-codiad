@@ -18,8 +18,8 @@ build:
 
 push: build
 	docker tag -f google/dev-common gcr.io/developer_tools_bundle/dev-common
-	gcloud docker push gcr.io/developer_tools_bundle/dev-common
+	gcloud --quiet docker push gcr.io/developer_tools_bundle/dev-common
 
 pull:
-	gcloud docker pull gcr.io/developer_tools_bundle/dev-common
+	gcloud --quiet docker pull gcr.io/developer_tools_bundle/dev-common
 	docker tag -f gcr.io/developer_tools_bundle/dev-common google/dev-common

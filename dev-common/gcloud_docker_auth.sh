@@ -22,7 +22,7 @@ set -o nounset
 set -o pipefail
 
 # Only authorize if we have credentials.
-if gcloud auth print-access-token &> /dev/null; then
-  gcloud docker --authorize-only --server="${GCLOUD_CONTAINER_SERVER}"
+if gcloud --quiet auth print-access-token &> /dev/null; then
+  gcloud --quiet docker --authorize-only --server="${GCLOUD_CONTAINER_SERVER}"
 fi
 

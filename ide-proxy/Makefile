@@ -37,10 +37,10 @@ deploy_latest: deploy_requirements
 # Pushes the the local build to testing
 testing: deploy_requirements build
 	docker tag -f google/ide-appengine gcr.io/${PROJECT}/ide-proxy:testing
-	gcloud docker push gcr.io/${PROJECT}/ide-proxy:testing
+	gcloud --quiet docker push gcr.io/${PROJECT}/ide-proxy:testing
 
 # Pushes the the testing to latest(stable)
 release: deploy_requirements
-	gcloud docker pull gcr.io/${PROJECT}/ide-proxy:testing
+	gcloud --quiet docker pull gcr.io/${PROJECT}/ide-proxy:testing
 	docker tag -f gcr.io/${PROJECT}/ide-proxy:testing gcr.io/${PROJECT}/ide-proxy
-	gcloud docker push gcr.io/${PROJECT}/ide-proxy
+	gcloud --quiet docker push gcr.io/${PROJECT}/ide-proxy
