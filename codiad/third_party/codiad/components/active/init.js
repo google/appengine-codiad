@@ -594,8 +594,19 @@
         if (doc.isScratch) {
           return;
         }
-        if (!(changeObject.text && changeObject.removed &&
-              changeObject.text.length === changeObject.removed.length === 0)) {
+        // Check if there has been any actual change:
+        var hasChanged = true;
+        if (changeObject.text && changeObject.removed &&
+            changeObject.text.length === changeObject.removed.length) {
+          hasChanged = false;
+          for (var i = 0; i < changeObject.text.length; i++) {
+            if (changeObject.text[i] !== changeObject.removed[i]) {
+              hasChanged = true;
+              break;
+            }
+          }
+        }
+        if (hasChanged) {
           _this.markChanged(_this.activeBuffer);
         }
       });
