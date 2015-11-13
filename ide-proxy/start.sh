@@ -22,7 +22,7 @@ gzip -dc ./codiad.tgz | docker load
 rm -f ./codiad.tgz.part.*
 
 # Setting up the GSC bucket for the IDE
-export IDE_BUCKET=gs://ide-data_${PROJECT}_appspot_com
+export IDE_BUCKET=$(echo "gs://ide-data_${PROJECT}_appspot_com" | sed 's/:/_/g')
 export IDE_DATA_DIR=/ide-data
 gsutil mb -p ${PROJECT} ${IDE_BUCKET}
 
