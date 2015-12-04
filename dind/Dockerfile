@@ -55,7 +55,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 \
 
 RUN apt-get update && \
     apt-cache policy docker-engine && \
-    apt-get install -y --no-install-recommends docker-engine && \
+    apt-get install -y --no-install-recommends docker-engine=1.9.1-0~jessie && \
     apt-get clean
 # Some Google Cloud SDK components (Maven gcloud:deploy plugin in particular)
 # rely on DOCKER_HOST to be explicitly set, so set that.
