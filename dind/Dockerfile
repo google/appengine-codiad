@@ -48,14 +48,14 @@ RUN apt-get update && \
     apt-get clean
 
 # Install Docker.
-RUN echo deb https://get.docker.io/ubuntu docker main \
+RUN echo deb https://apt.dockerproject.org/repo debian-jessie main \
         > /etc/apt/sources.list.d/docker.list
-RUN apt-key adv \
-        --keyserver hkp://keyserver.ubuntu.com:80 \
-        --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 \
+      --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        lxc-docker-1.6.2 && \
+    apt-cache policy docker-engine && \
+    apt-get install -y --no-install-recommends docker-engine && \
     apt-get clean
 # Some Google Cloud SDK components (Maven gcloud:deploy plugin in particular)
 # rely on DOCKER_HOST to be explicitly set, so set that.
