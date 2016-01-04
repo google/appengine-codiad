@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 
 <title>CodeMirror: User Manual</title>
 <meta charset="utf-8"/>
@@ -69,7 +69,7 @@
 <section class=first id=overview>
     <h2 style="position: relative">
       User manual and reference guide
-      <span style="color: #888; font-size: 1rem; position: absolute; right: 0; bottom: 0">version 5.9.0</span>
+      <span style="color: #888; font-size: 1rem; position: absolute; right: 0; bottom: 0">version 5.10.1</span>
     </h2>
 
     <p>CodeMirror is a code-editor component that can be embedded in
@@ -582,15 +582,17 @@
       mode's <a href="#option_electricChars">electric</a> patterns,
       and this caused the line's indentation to change.</dd>
 
-      <dt id="event_beforeSelectionChange"><code><strong>"beforeSelectionChange"</strong> (instance: CodeMirror, obj: {ranges, update})</code></dt>
+      <dt id="event_beforeSelectionChange"><code><strong>"beforeSelectionChange"</strong> (instance: CodeMirror, obj: {ranges, origin, update})</code></dt>
       <dd>This event is fired before the selection is moved. Its
       handler may inspect the set of selection ranges, present as an
       array of <code>{anchor, head}</code> objects in
       the <code>ranges</code> property of the <code>obj</code>
       argument, and optionally change them by calling
       the <code>update</code> method on this object, passing an array
-      of ranges in the same format. Handlers for this event have the
-      same restriction
+      of ranges in the same format. The object also contains
+      an <code>origin</code> property holding the origin string passed
+      to the selection-changing method, if any. Handlers for this
+      event have the same restriction
       as <a href="#event_beforeChange"><code>"beforeChange"</code></a>
       handlers — they should not do anything to directly update the
       state of the editor.</dd>
@@ -651,8 +653,10 @@
       should <em>not</em> try to change the state of the editor.</dd>
 
       <dt id="event_dom"><code><strong>"mousedown"</strong>,
-      <strong>"dblclick"</strong>, <strong>"contextmenu"</strong>, <strong>"keydown"</strong>, <strong>"keypress"</strong>,
-      <strong>"keyup"</strong>, <strong>"dragstart"</strong>, <strong>"dragenter"</strong>,
+      <strong>"dblclick"</strong>, <strong>"touchstart"</strong>, <strong>"contextmenu"</strong>,
+      <strong>"keydown"</strong>, <strong>"keypress"</strong>,
+      <strong>"keyup"</strong>, <strong>"cut"</strong>, <strong>"copy"</strong>, <strong>"paste"</strong>,
+      <strong>"dragstart"</strong>, <strong>"dragenter"</strong>,
       <strong>"dragover"</strong>, <strong>"drop"</strong>
       (instance: CodeMirror, event: Event)</code></dt>
       <dd>Fired when CodeMirror is handling a DOM event of this type.
@@ -1350,7 +1354,7 @@ editor.setOption("extraKeys", {
       <dd>An equivalent
       of <a href="#extendSelection"><code>extendSelection</code></a>
       that acts on all selections at once.</dd>
-      <dt id="extendSelectionsBy"><code><strong>doc.extendSelectionsBy</strong>(f: function(range: {anchor, head}) → {anchor, head}), ?options: object)</code></dt>
+      <dt id="extendSelectionsBy"><code><strong>doc.extendSelectionsBy</strong>(f: function(range: {anchor, head}) → {line, ch}), ?options: object)</code></dt>
       <dd>Applies the given function to all existing selections, and
       calls <a href="#extendSelections"><code>extendSelections</code></a>
       on the result.</dd>
@@ -2000,10 +2004,14 @@ editor.setOption("extraKeys", {
           indentation by the given amount of spaces.</dd>
         </dl></dd>
 
-      <dt id="toggleOverwrite"><code><strong>cm.toggleOverwrite</strong>(?value: bool)</code></dt>
+      <dt id="toggleOverwrite"><code><strong>cm.toggleOverwrite</strong>(?value: boolean)</code></dt>
       <dd>Switches between overwrite and normal insert mode (when not
       given an argument), or sets the overwrite mode to a specific
       state (when given an argument).</dd>
+
+      <dt id="isReadOnly"><code><strong>cm.isReadOnly</strong>() → boolean</code></dt>
+      <dd>Tells you whether the editor's content can be edited by the
+      user.</dd>
 
       <dt id="lineSeparator"><code><strong>doc.lineSeparator</strong>()</code></dt>
       <dd>Returns the preferred line separator string for this
@@ -2233,6 +2241,13 @@ editor.setOption("extraKeys", {
       on <code>searchcursor.js</code>, and will make use
       of <a href="#addon_dialog"><code>openDialog</code></a> when
       available to make prompting for search queries less ugly.</dd>
+
+      <dt id="addon_jump-to-line"><a href="../addon/search/jump-to-line.js"><code>search/jump-to-line.js</code></a></dt>
+      <dd>Implements a <code>jumpToLine</code> command and binding <code>Alt-G</code> to it.
+      Accepts <code>linenumber</code>, <code>+/-linenumber</code>, <code>line:char</code>,
+      <code>scroll%</code> and <code>:linenumber</code> formats.
+      This will make use of <a href="#addon_dialog"><code>openDialog</code></a>
+      when available to make prompting for line number neater.</dd>
 
       <dt id="addon_matchesonscrollbar"><a href="../addon/search/matchesonscrollbar.js"><code>search/matchesonscrollbar.js</code></a></dt>
       <dd>Adds a <code>showMatchesOnScrollbar</code> method to editor
@@ -3240,8 +3255,8 @@ editor.setOption("extraKeys", {
     <p>CodeMirror has a robust VIM mode that attempts to faithfully
     emulate VIM's most useful features. It can be enabled by
     including <a href="../keymap/vim.js"><code>keymap/vim.js</code>
-    </a> and setting the <code>keymap</code> option to
-    <code>vim</code>.</p>
+    </a> and setting the <code>keyMap</code> option to
+    <code>"vim"</code>.</p>
 
     <h3 id="vimapi_configuration">Configuration</h3>
 
@@ -3336,7 +3351,7 @@ editor.setOption("extraKeys", {
       be set to a certain position after the operation finishes, it
       can return a cursor object.</dd>
 
-      <dt id="vimapi_defineActon"><strong><code>defineAction(name: string, fn: function(cm: CodeMirror, ?actionArgs: object))</strong></code></dt>
+      <dt id="vimapi_defineActon"><strong><code>defineAction(name: string, fn: function(cm: CodeMirror, ?actionArgs: object))</code></strong></dt>
       <dd>Defines an action command, similar to
       <strong><code>defineMotion</code></strong>. Action commands
       can have arbitrary behavior, making them more flexible than
