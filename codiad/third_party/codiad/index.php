@@ -167,6 +167,7 @@ foreach($plugins as $plugin){
 
     <script src="js/codemirror/addon/comment/comment.min.js"></script>
     <script src="js/codemirror/addon/dialog/dialog.min.js"></script>
+    <script src="js/codemirror/addon/search/jump-to-line.min.js"></script>
     <script src="js/codemirror/addon/search/searchcursor.min.js"></script>
     <script src="js/codemirror/addon/search/search.min.js"></script>
     <script src="js/codemirror/addon/search/match-highlighter.min.js"></script>
